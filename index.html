@@ -660,3 +660,57 @@ async function findPeople() {
     card.className = "feature";
 
     const name = document.createElement
+    
+("h3");
+    name.textContent = person.full_name || "Student";
+
+    const university = document.createElement("p");
+    university.textContent =
+      "University: " + (person.university || "Not provided");
+
+    const department = document.createElement("p");
+    department.textContent =
+      "Department: " + (person.department || "Not provided");
+
+    const level = document.createElement("p");
+    level.textContent =
+      "Level: " + (person.level || "Not provided");
+
+    const bio = document.createElement("p");
+    bio.textContent = person.bio || "No bio added yet.";
+
+    const connectButton = document.createElement("button");
+    connectButton.textContent = "Send Connection Request";
+
+    connectButton.addEventListener("click", async () => {
+      connectButton.disabled = true;
+      connectButton.textContent = "Sending...";
+
+      const { error: requestError } = await supabase
+        .from("connections")
+        .insert({
+          sender_id: currentUser.id,
+          recipient_id: person.id,
+          status: "pending"
+        });
+
+      if (requestError) {
+        showStatus(
+          "Could not send connection request: " +
+          requestError.message,
+          true
+        );
+        connectButton.disabled = false;
+        connectButton.textContent = "Send Connection Request";
+        return;
+      }
+
+      showStatus("Connection request sent successfully.");
+      connectButton.textContent = "Request Sent";
+    });
+
+    card.append(name, university, department, level, bio, connectButton);
+    results.appendChild(card);
+  }
+}
+  
