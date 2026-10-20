@@ -4,183 +4,368 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Compass Link | Student Community</title>
+  <meta name="description" content="Connect, learn and discover with students across Nigerian universities.">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f7f2;
-      color: #173d32;
+      background: #f4f7f5;
+      color: #202b25;
     }
-
     header {
-      background: #123b32;
+      background: #126b46;
       color: white;
       padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    header h2 {
-      margin: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 15px;
-    }
-
-    .hero {
       text-align: center;
-      padding: 80px 20px;
-      background: #e5f0d7;
     }
-
-    .hero h1 {
-      font-size: 42px;
-      margin-bottom: 15px;
-    }
-
-    .hero p {
-      font-size: 18px;
-      line-height: 1.6;
+    header h1 { margin: 0 0 8px; }
+    main {
       max-width: 650px;
-      margin: 0 auto 25px;
+      margin: 28px auto;
+      padding: 0 16px;
     }
-
-    .button {
-      display: inline-block;
-      background: #123b32;
-      color: white;
-      padding: 14px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    section {
-      padding: 50px 20px;
-      text-align: center;
-    }
-
-    .features {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      max-width: 1000px;
-      margin: 25px auto 0;
-    }
-
     .card {
       background: white;
-      padding: 25px;
-      border-radius: 12px;
-      flex: 1 1 230px;
-      max-width: 300px;
-      box-shadow: 0 4px 15px #0000000d;
+      padding: 24px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px #0000000b;
     }
-
-    .card h3 {
-      color: #24634d;
+    h2 { margin-top: 0; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 14px 0 6px;
     }
-
-    footer {
-      background: #123b32;
+    input, textarea {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5ce;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      background: #126b46;
       color: white;
-      text-align: center;
-      padding: 25px 15px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 14px;
     }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 32px;
-      }
-
-      nav {
-        margin-top: 15px;
-      }
-
-      nav a {
-        margin: 0 8px 0 0;
-      }
-    }
+    button.secondary { background: #46564c; }
+    button:disabled { opacity: .6; }
+    .hidden { display: none; }
+    .muted { color: #657269; line-height: 1.5; }
+    #message { overflow-wrap: anywhere; }
+    footer { text-align: center; padding: 25px; color: #657269; }
   </style>
 </head>
 <body>
-
   <header>
-    <h2>🧭 Compass Link</h2>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#features">Features</a>
-      <a href="#join">Join Us</a>
-    </nav>
+    <h1>Compass Link</h1>
+    <p>Find Your People. Find Your Direction.</p>
+    <p>Connect · Learn · Discover</p>
   </header>
 
   <main>
-    <div class="hero">
-      <h1>Find Your People.<br>Find Your Direction.</h1>
-      <p>
-        Compass Link is a student community designed to connect
-        university students across Nigeria. Meet students, learn
-        together, share opportunities, and grow academically.
+    <section class="card" id="authCard">
+      <h2>Join Compass Link</h2>
+      <p class="muted">
+        Connect with students and build your academic community
+        across Nigerian universities.
       </p>
-      <a class="button" href="#join">Join Our Community</a>
-    </div>
 
-    <section id="about">
-      <h2>Welcome to Compass Link</h2>
-      <p>
-        Your university is one place. Your community can be bigger.
-        Connect with students from different universities and discover
-        new ways to learn and collaborate.
-      </p>
+      <form id="signupForm">
+        <h3>Create your account</h3>
+
+        <label for="signupName">Full name</label>
+        <input id="signupName" autocomplete="name" required>
+
+        <label for="signupEmail">Email address</label>
+        <input id="signupEmail" type="email"
+               autocomplete="email" required>
+
+        <label for="signupPassword">Password</label>
+        <input id="signupPassword" type="password"
+               autocomplete="new-password" minlength="8" required>
+
+        <button type="submit">Sign Up</button>
+      </form>
+
+      <hr style="margin:24px 0;border:0;border-top:1px solid #e2e8e3">
+
+      <form id="loginForm">
+        <h3>Already registered?</h3>
+
+        <label for="loginEmail">Email address</label>
+        <input id="loginEmail" type="email"
+               autocomplete="email" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password"
+               autocomplete="current-password" required>
+
+        <button type="submit">Log In</button>
+      </form>
+
+      <button id="resetButton" class="secondary" type="button">
+        Forgot password?
+      </button>
     </section>
 
-    <section id="features">
-      <h2>What You Can Do</h2>
+    <section class="card hidden" id="profileCard">
+      <h2>Your student profile</h2>
+      <p id="welcome"></p>
 
-      <div class="features">
-        <div class="card">
-          <h3>🤝 Connect</h3>
-          <p>Meet students from your university and other campuses.</p>
-        </div>
+      <form id="profileForm">
+        <label for="fullName">Full name</label>
+        <input id="fullName" required>
 
-        <div class="card">
-          <h3>📚 Learn</h3>
-          <p>Find study partners and exchange useful academic resources.</p>
-        </div>
+        <label for="university">University</label>
+        <input id="university" placeholder="e.g. University of Lagos">
 
-        <div class="card">
-          <h3>🚀 Discover</h3>
-          <p>Explore scholarships, internships, events, and opportunities.</p>
-        </div>
-      </div>
+        <label for="department">Department</label>
+        <input id="department" placeholder="e.g. Computer Science">
+
+        <label for="level">Level of study</label>
+        <input id="level" placeholder="e.g. 100, 200, 300 or postgraduate">
+
+        <label for="bio">About you</label>
+        <textarea id="bio" rows="3"
+                  placeholder="Tell other students about yourself"></textarea>
+
+        <button type="submit">Save Profile</button>
+      </form>
+
+      <button id="logoutButton" class="secondary" type="button">
+        Log Out
+      </button>
     </section>
 
-    <section id="join">
-      <h2>Be Part of the Beginning</h2>
-      <p>Compass Link is being built to serve students across Nigeria.</p>
-      <a class="button" href="mailto:hello@compasslink.example">
-        Contact Us
-      </a>
-      <p>
-        This is an early website prototype. Student accounts and
-        messaging will be added in future development.
-      </p>
+    <section class="card">
+      <h2>Connect. Learn. Discover.</h2>
+      <p>Meet students, share knowledge and build your future together.</p>
     </section>
+
+    <p id="message" role="status" aria-live="polite"></p>
   </main>
 
-  <footer>
-    <p>© 2026 Compass Link. Built for students, with students.</p>
-  </footer>
+  <footer>Compass Link · Built for students</footer>
 
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL =
+      "https://ttvbqeswhluwsypajexu.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+    const message = document.getElementById("message");
+    const authCard = document.getElementById("authCard");
+    const profileCard = document.getElementById("profileCard");
+
+    function showMessage(text, isError = false) {
+      message.textContent = text;
+      message.style.color = isError ? "#b42318" : "#126b46";
+    }
+
+    if (
+      SUPABASE_PUBLISHABLE_KEY ===
+      "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE"
+    ) {
+      showMessage(
+        "Setup needed: add your Supabase publishable API key before using registration.",
+        true
+      );
+    } else {
+      const supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+      async function openProfile(user) {
+        authCard.classList.add("hidden");
+        profileCard.classList.remove("hidden");
+        document.getElementById("welcome").textContent =
+          "Signed in as " + user.email;
+
+        const { data, error } = await supabase
+          .from("student_profiles")
+          .select("full_name, university, department, level, bio")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (error) {
+          showMessage("Could not load profile: " + error.message, true);
+          return;
+        }
+
+        const fields = ["full_name", "university", "department", "level", "bio"];
+        const inputs = ["fullName", "university", "department", "level", "bio"];
+
+        inputs.forEach((id, index) => {
+          const savedValue = data?.[fields[index]];
+          const metadataName =
+            index === 0 ? user.user_metadata?.full_name : null;
+
+          document.getElementById(id).value =
+            savedValue || metadataName || "";
+        });
+      }
+
+      document.getElementById("signupForm").addEventListener(
+        "submit", async (event) => {
+          event.preventDefault();
+          showMessage("Creating your account...");
+
+          const fullName =
+            document.getElementById("signupName").value.trim();
+          const email =
+            document.getElementById("signupEmail").value.trim();
+          const password =
+            document.getElementById("signupPassword").value;
+
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName },
+              emailRedirectTo: window.location.origin +
+                window.location.pathname
+            }
+          });
+
+          if (error) {
+            showMessage(error.message, true);
+            return;
+          }
+
+          if (data.session && data.user) {
+            await openProfile(data.user);
+            showMessage("Account created. Welcome to Compass Link!");
+          } else {
+            showMessage(
+              "Account created! Check your email and click the verification link. Then return here and log in."
+            );
+          }
+        }
+      );
+
+      document.getElementById("loginForm").addEventListener(
+        "submit", async (event) => {
+          event.preventDefault();
+          showMessage("Signing you in...");
+
+          const email =
+            document.getElementById("loginEmail").value.trim();
+          const password =
+            document.getElementById("loginPassword").value;
+
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) {
+            showMessage(error.message, true);
+            return;
+          }
+
+          await openProfile(data.user);
+          showMessage("You are now logged in.");
+        }
+      );
+
+      document.getElementById("profileForm").addEventListener(
+        "submit", async (event) => {
+          event.preventDefault();
+          showMessage("Saving your profile...");
+
+          const { data: { user }, error: userError } =
+            await supabase.auth.getUser();
+
+          if (userError || !user) {
+            showMessage("Please log in again.", true);
+            return;
+          }
+
+          const profile = {
+            id: user.id,
+            full_name: document.getElementById("fullName").value.trim(),
+            university: document.getElementById("university").value.trim(),
+            department: document.getElementById("department").value.trim(),
+            level: document.getElementById("level").value.trim(),
+            bio: document.getElementById("bio").value.trim(),
+            updated_at: new Date().toISOString()
+          };
+
+          const { error } = await supabase
+            .from("student_profiles")
+            .upsert(profile, { onConflict: "id" });
+
+          if (error) {
+            showMessage("Could not save profile: " + error.message, true);
+            return;
+          }
+
+          showMessage("Your student profile has been saved!");
+        }
+      );
+
+      document.getElementById("logoutButton").addEventListener(
+        "click", async () => {
+          const { error } = await supabase.auth.signOut();
+
+          if (error) {
+            showMessage(error.message, true);
+            return;
+          }
+
+          profileCard.classList.add("hidden");
+          authCard.classList.remove("hidden");
+          showMessage("You have logged out.");
+        }
+      );
+
+      document.getElementById("resetButton").addEventListener(
+        "click", async () => {
+          const email = prompt("Enter your registered email address:");
+
+          if (!email) return;
+
+          const { error } = await supabase.auth.resetPasswordForEmail(
+            email.trim(),
+            { redirectTo: window.location.origin }
+          );
+
+          if (error) {
+            showMessage(error.message, true);
+          } else {
+            showMessage("If the address is registered, a password reset email will be sent.");
+          }
+        }
+      );
+
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_IN" && session?.user) {
+          openProfile(session.user);
+        }
+      });
+
+      supabase.auth.getSession().then(({ data, error }) => {
+        if (error) {
+          showMessage(error.message, true);
+        } else if (data.session?.user) {
+          openProfile(data.session.user);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
