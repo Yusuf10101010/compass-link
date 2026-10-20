@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080f1c">
 <title>Compass Link | Academic Community</title>
+
 <style>
 :root {
   --navy:#080f1c;
@@ -36,11 +37,7 @@ header {
   background:#080f1c;
   border-bottom:1px solid var(--line);
 }
-.brand {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
+.brand { display:flex; align-items:center; gap:12px; }
 .logo {
   width:48px;
   height:48px;
@@ -67,11 +64,7 @@ nav button:hover {
   border-color:var(--line);
   color:white;
 }
-main {
-  max-width:1100px;
-  margin:auto;
-  padding:28px 18px 45px;
-}
+main { max-width:1100px; margin:auto; padding:28px 18px 45px; }
 .hero {
   display:grid;
   grid-template-columns:1.2fr .8fr;
@@ -223,6 +216,7 @@ input::placeholder,textarea::placeholder { color:#8190a6; }
   border:1px solid var(--line);
   border-radius:12px;
   background:#101b2b;
+  margin-top:12px;
 }
 .feature h4 { margin:8px 0; }
 .feature p { margin:0; color:var(--muted); font-size:14px; }
@@ -255,11 +249,11 @@ footer {
     </div>
   </div>
   <nav>
-    <button data-scroll="home">⌂ Home</button>
-    <button data-scroll="community">♧ Connect</button>
-    <button data-scroll="account">☏ Messages</button>
-    <button data-scroll="community">⚑ Announcements</button>
-    <button data-scroll="profile">♙ Profile</button>
+    <button data-scroll="home" type="button">⌂ Home</button>
+    <button data-scroll="connectFeature" type="button">♧ Connect</button>
+    <button data-scroll="account" type="button">☏ Account</button>
+    <button data-scroll="connectFeature" type="button">⚑ Community</button>
+    <button data-scroll="profile" type="button">♙ Profile</button>
   </nav>
 </header>
 
@@ -292,11 +286,9 @@ footer {
       <div class="inner" id="signupPanel">
         <h3>Join Compass Link</h3>
         <p class="sub">Connect with people and build your academic community.</p>
-
         <form id="signupForm">
           <label for="signupName">Full name</label>
-          <input id="signupName" autocomplete="name"
-                 placeholder="Enter your full name" required>
+          <input id="signupName" autocomplete="name" placeholder="Enter your full name" required>
 
           <label for="signupRole">Your academic role</label>
           <select id="signupRole" required>
@@ -313,13 +305,10 @@ footer {
           <input id="signupUniversity" placeholder="Your institution" required>
 
           <label for="signupEmail">Email address</label>
-          <input id="signupEmail" type="email" autocomplete="email"
-                 placeholder="Enter your email address" required>
+          <input id="signupEmail" type="email" autocomplete="email" placeholder="Enter your email address" required>
 
           <label for="signupPassword">Password</label>
-          <input id="signupPassword" type="password"
-                 autocomplete="new-password" minlength="8"
-                 placeholder="At least 8 characters" required>
+          <input id="signupPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
 
           <button class="primary" type="submit">Create Account</button>
           <p class="muted">After registering, check your email for the verification link.</p>
@@ -334,8 +323,7 @@ footer {
           <input id="loginEmail" type="email" autocomplete="email" required>
 
           <label for="loginPassword">Password</label>
-          <input id="loginPassword" type="password"
-                 autocomplete="current-password" required>
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
 
           <button class="primary" type="submit">Log In</button>
         </form>
@@ -344,7 +332,7 @@ footer {
       </div>
     </div>
 
-    <aside class="card" id="community">
+    <aside class="card">
       <div class="role-list">
         <h3>Your Academic Community</h3>
         <div class="role"><div class="role-icon">🎓</div><div><b>Undergraduate Student</b><small>Build your future</small></div></div>
@@ -364,7 +352,6 @@ footer {
     <div class="inner">
       <h3>Your Academic Profile</h3>
       <p class="sub" id="welcomeText"></p>
-
       <form id="profileForm">
         <label for="profileName">Full name</label>
         <input id="profileName" required>
@@ -397,20 +384,29 @@ footer {
     </div>
   </section>
 
+  <section class="card" id="connectFeature" style="margin-top:28px">
+    <div class="inner">
+      <h3>Connect with the Academic Community</h3>
+      <p class="sub">Discover other members and build your academic network.</p>
+
+      <label for="connectSearch">Search by name, university or department</label>
+      <input id="connectSearch" placeholder="Enter a name or institution">
+
+      <button class="primary" id="findPeopleButton" type="button">Find People</button>
+
+      <h3 style="margin-top:28px">People you can connect with</h3>
+      <div id="peopleResults"><p class="muted">Log in to discover academic profiles.</p></div>
+
+      <h3 style="margin-top:28px">Connection Requests</h3>
+      <div id="connectionResults"><p class="muted">Log in to see your requests.</p></div>
+    </div>
+  </section>
+
   <h3 style="margin-top:28px">Connect. Learn. Discover.</h3>
   <section class="features">
-    <article class="feature">
-      <div>♧</div><h4>Connect</h4>
-      <p>Build meaningful academic connections across institutions.</p>
-    </article>
-    <article class="feature">
-      <div>▤</div><h4>Share</h4>
-      <p>Make room for posts, ideas, research and announcements.</p>
-    </article>
-    <article class="feature">
-      <div>☏</div><h4>Communicate</h4>
-      <p>A foundation for private messaging and collaboration.</p>
-    </article>
+    <article class="feature"><div>♧</div><h4>Connect</h4><p>Build meaningful academic connections across institutions.</p></article>
+    <article class="feature"><div>▤</div><h4>Share</h4><p>Make room for posts, ideas, research and announcements.</p></article>
+    <article class="feature"><div>☏</div><h4>Communicate</h4><p>A foundation for private messaging and collaboration.</p></article>
   </section>
 </main>
 
@@ -420,19 +416,11 @@ footer {
 </footer>
 
 <script type="module">
-import { createClient } from
-  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL =
-  "https://ttvbqeswhluwsypajexu.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
-
-const supabase = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const SUPABASE_URL = "https://ttvbqeswhluwsypajexu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 const $ = id => document.getElementById(id);
 const status = $("status");
@@ -457,7 +445,7 @@ $("backSignup").addEventListener("click", () => setTab("signup"));
 
 document.querySelectorAll("[data-scroll]").forEach(button => {
   button.addEventListener("click", () => {
-    $(button.dataset.scroll).scrollIntoView({ behavior:"smooth" });
+    $(button.dataset.scroll).scrollIntoView({behavior:"smooth"});
   });
 });
 
@@ -468,8 +456,7 @@ async function loadProfile(user) {
   $("welcomeText").textContent = "Signed in as " + user.email;
 
   const meta = user.user_metadata || {};
-
-  const { data, error } = await supabase
+  const {data,error} = await supabase
     .from("student_profiles")
     .select("full_name, university, department, level, bio")
     .eq("id", user.id)
@@ -500,11 +487,11 @@ $("signupForm").addEventListener("submit", async event => {
   const email = $("signupEmail").value.trim();
   const password = $("signupPassword").value;
 
-  const { data, error } = await supabase.auth.signUp({
+  const {data,error} = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { full_name:fullName, role, university },
+      data: {full_name:fullName, role, university},
       emailRedirectTo: "https://yusuf10101010.github.io/compass-link/"
     }
   });
@@ -518,6 +505,7 @@ $("signupForm").addEventListener("submit", async event => {
 
   if (data.session && data.user) {
     await loadProfile(data.user);
+    await loadConnectionRequests();
     showStatus("Account created. Welcome to Compass Link!");
   } else {
     showStatus("Account created. Check your email and confirm your address, then log in.");
@@ -532,7 +520,7 @@ $("loginForm").addEventListener("submit", async event => {
   button.disabled = true;
   showStatus("Logging you in...");
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const {data,error} = await supabase.auth.signInWithPassword({
     email: $("loginEmail").value.trim(),
     password: $("loginPassword").value
   });
@@ -545,6 +533,7 @@ $("loginForm").addEventListener("submit", async event => {
   }
 
   await loadProfile(data.user);
+  await loadConnectionRequests();
   showStatus("You are logged in.");
 });
 
@@ -570,12 +559,12 @@ $("profileForm").addEventListener("submit", async event => {
     updated_at: new Date().toISOString()
   };
 
-  const { error } = await supabase
+  const {error} = await supabase
     .from("student_profiles")
-    .upsert(profile, { onConflict:"id" });
+    .upsert(profile, {onConflict:"id"});
 
   if (!error) {
-    const { error: metadataError } = await supabase.auth.updateUser({
+    const {error:metadataError} = await supabase.auth.updateUser({
       data: {
         role: $("profileRole").value,
         full_name: profile.full_name,
@@ -606,9 +595,9 @@ $("forgotButton").addEventListener("click", async () => {
 
   if (!email) return;
 
-  const { error } = await supabase.auth.resetPasswordForEmail(
+  const {error} = await supabase.auth.resetPasswordForEmail(
     email.trim(),
-    { redirectTo:"https://yusuf10101010.github.io/compass-link/" }
+    {redirectTo:"https://yusuf10101010.github.io/compass-link/"}
   );
 
   if (error) showStatus(error.message, true);
@@ -616,7 +605,7 @@ $("forgotButton").addEventListener("click", async () => {
 });
 
 $("logoutButton").addEventListener("click", async () => {
-  const { error } = await supabase.auth.signOut();
+  const {error} = await supabase.auth.signOut();
 
   if (error) {
     showStatus(error.message, true);
@@ -625,26 +614,49 @@ $("logoutButton").addEventListener("click", async () => {
 
   currentUser = null;
   $("profile").classList.add("hidden");
+  $("peopleResults").textContent = "Log in to discover academic profiles.";
+  $("connectionResults").textContent = "Log in to see your requests.";
   setTab("login");
   showStatus("You have logged out.");
-  $("account").scrollIntoView({ behavior:"smooth" });
+  $("account").scrollIntoView({behavior:"smooth"});
 });
 
-const { data: sessionData } = await supabase.auth.getSession();
-
-if (sessionData.session?.user) {
-  await loadProfile(sessionData.session.user);
-}
-
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === "SIGNED_IN" && session?.user && !currentUser) {
-    loadProfile(session.user);
+/* STUDENT DISCOVERY */
+async function findPeople() {
+  if (!currentUser) {
+    showStatus("Please log in to find people.", true);
+    return;
   }
 
-  if (event === "SIGNED_OUT") {
-    currentUser = null;
+  const results = $("peopleResults");
+  const term = $("connectSearch").value.trim().toLowerCase();
+  results.textContent = "Searching profiles...";
+
+  const {data:profiles,error} = await supabase
+    .from("student_profiles")
+    .select("id, full_name, university, department, level, bio")
+    .limit(100);
+
+  if (error) {
+    results.textContent = "Could not load profiles: " + error.message;
+    return;
   }
-});
-</script>
-</body>
-  </html>
+
+  const people = (profiles || []).filter(person =>
+    person.id !== currentUser.id &&
+    [person.full_name, person.university, person.department]
+      .some(value => (value || "").toLowerCase().includes(term))
+  );
+
+  results.replaceChildren();
+
+  if (!people.length) {
+    results.textContent = "No matching profiles found yet. More people can join soon!";
+    return;
+  }
+
+  for (const person of people) {
+    const card = document.createElement("div");
+    card.className = "feature";
+
+    const name = document.createElement
