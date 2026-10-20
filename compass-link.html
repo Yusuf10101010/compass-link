@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compass Link</title>
+<style>
+:root{color-scheme:dark;--bg:#10151f;--panel:#1a2230;--line:#303b4d;--text:#f2f4f8;--muted:#aab4c4;--accent:#b7c0cc;--navy:#0b1019}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#0b1019,#171f2c);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:24px 16px;border-bottom:1px solid var(--line);background:#0b1019}header .wrap,main{max-width:900px;margin:auto}h1{margin:0;font-size:1.9rem;letter-spacing:.02em}header p{margin:4px 0 0;color:var(--muted)}
+main{padding:20px 14px 48px}.panel{background:rgba(26,34,48,.96);border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 16px;box-shadow:0 10px 30px #0002}h2{font-size:1.25rem;margin:0 0 12px}h3{margin:0 0 6px}p{overflow-wrap:anywhere}.muted,.hint{color:var(--muted);font-size:.93rem}
+label{display:block;margin:10px 0 5px;color:#dce2ea;font-size:.94rem}input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #465267;background:#0f1520;color:var(--text);font:inherit}textarea{min-height:90px;resize:vertical}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+button{border:1px solid #c2cad5;background:#c2cad5;color:#10151f;border-radius:10px;padding:11px 15px;font:600  .98rem system-ui;cursor:pointer;margin:10px 8px 0 0}button.secondary{background:transparent;color:var(--text);border-color:#59667a}button:disabled{opacity:.6;cursor:wait}.status{padding:10px 12px;margin-top:12px;border-radius:9px;background:#101722;border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere}.feature{padding:14px;margin:12px 0 0;background:#111925;border:1px solid var(--line);border-radius:12px}.feature p{margin:5px 0}.hidden{display:none!important}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.small{font-size:.88rem}
+footer{text-align:center;color:var(--muted);padding:20px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Compass Link</h1><p>Connect with your academic community.</p></div></header>
+<main>
+  <section class="panel">
+    <h2>Welcome</h2>
+    <p class="muted">A student community for discovering classmates, sharing academic interests, and building connections. Sign in to manage your profile and find other students.</p>
+    <p class="hint">This file needs an internet connection and your existing Supabase project configuration to support accounts and profiles.</p>
+  </section>
+
+  <section class="panel" id="authPanel">
+    <h2>Account</h2>
+    <div class="grid">
+      <div><label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Your password"></div>
+    </div>
+    <button id="signupBtn">Create account</button><button id="loginBtn" class="secondary">Log in</button><button id="resetBtn" class="secondary">Reset password</button><button id="logoutBtn" class="secondary hidden">Log out</button>
+    <div id="authStatus" class="status" role="status" aria-live="polite">Not logged in.</div>
+  </section>
+
+  <section class="panel hidden" id="profilePanel">
+    <h2>My academic profile</h2>
+    <div class="grid">
+      <div><label for="fullName">Full name</label><input id="fullName" autocomplete="name" placeholder="Your full name"></div>
+      <div><label for="university">University</label><input id="university" placeholder="Your university"></div>
+      <div><label for="department">Department</label><input id="department" placeholder="Your department"></div>
+      <div><label for="level">Level / year</label><input id="level" placeholder="e.g. 200 Level"></div>
+    </div>
+    <label for="bio">Short bio / academic interests</label><textarea id="bio" placeholder="Tell other students about your interests"></textarea>
+    <button id="saveProfileBtn">Save academic profile</button>
+    <div id="profileStatus" class="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="panel hidden" id="discoveryPanel">
+    <div class="section-head"><h2>Connect with the Academic Community</h2><button id="findPeopleBtn">Find People</button></div>
+    <label for="connectSearch">Search by name, university, or department</label>
+    <input id="connectSearch" type="search" placeholder="Type a name or university">
+    <div class="hint">Tap Find People to load profiles. Only profiles made visible by your database permissions can appear.</div>
+    <div id="peopleStatus" class="status" role="status" aria-live="polite">Log in to find people.</div>
+    <div id="peopleResults"></div>
+  </section>
+  <footer>Compass Link · Student community</footer>
+</main>
+<script type="module">
+const SUPABASE_URL = "https://ttvbqeswhluwsypajexu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
+
+const $ = id => document.getElementById(id);
+let supabase = null;
+let currentUser = null;
+
+function setStatus(id, message, isError = false) {
+  const el = $(id);
+  if (!el) return;
+  el.textContent = message;
+  el.style.borderColor = isError ? "#bd7373" : "";
+}
+function showLoggedIn(user) {
+  currentUser = user || null;
+  $("profilePanel").classList.toggle("hidden", !currentUser);
+  $("discoveryPanel").classList.toggle("hidden", !currentUser);
+  $("logoutBtn").classList.toggle("hidden", !currentUser);
+  setStatus("authStatus", currentUser ? `Logged in as ${currentUser.email || "your account"}.` : "Not logged in.");
+}
+function getCredentials() {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email) throw new Error("Enter your email address.");
+  if (!password) throw new Error("Enter your password.");
+  return {email, password};
+}
+
+async function init() {
+  try {
+    const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+    supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const { data, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    showLoggedIn(data.session?.user || null);
+    if (currentUser) await loadProfile();
+    supabase.auth.onAuthStateChange((_event, session) => {
+      showLoggedIn(session?.user || null);
+      if (session?.user) setTimeout(() => loadProfile(), 0);
+    });
+    setStatus("authStatus", currentUser ? `Logged in as ${currentUser.email || "your account"}.` : "Ready. Create an account or log in.");
+  } catch (error) {
+    setStatus("authStatus", "Could not initialize Compass Link: " + (error?.message || String(error)), true);
+  }
+}
+$("signupBtn").addEventListener("click", async () => {
+  try {
+    if (!supabase) throw new Error("The app is still loading. Wait a moment and try again.");
+    const {email,password} = getCredentials();
+    setStatus("authStatus","Creating account...");
+    const {data,error} = await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin + location.pathname}});
+    if(error) throw error;
+    if(data.session) showLoggedIn(data.session.user);
+    setStatus("authStatus", data.session ? "Account created and logged in." : "Account created. Check your email for the confirmation link, then return to Compass Link and log in.");
+  } catch(error) { setStatus("authStatus",error.message || String(error),true); }
+});
+$("loginBtn").addEventListener("click", async () => {
+  try {
+    if (!supabase) throw new Error("The app is still loading. Wait a moment and try again.");
+    const {email,password} = getCredentials();
+    setStatus("authStatus","Logging in...");
+    const {data,error} = await supabase.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    showLoggedIn(data.user);
+    await loadProfile();
+    setStatus("authStatus","Logged in successfully.");
+  } catch(error) { setStatus("authStatus",error.message || String(error),true); }
+});
+$("resetBtn").addEventListener("click", async () => {
+  try {
+    if (!supabase) throw new Error("The app is still loading. Wait a moment and try again.");
+    const email = $("email").value.trim();
+    if(!email) throw new Error("Enter your email address first.");
+    const {error} = await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin + location.pathname});
+    if(error) throw error;
+    setStatus("authStatus","If the account exists, a password-reset email has been sent.");
+  } catch(error) { setStatus("authStatus",error.message || String(error),true); }
+});
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    const {error} = await supabase.auth.signOut();
+    if(error) throw error;
+    showLoggedIn(null);
+    setStatus("authStatus","Logged out.");
+  } catch(error) { setStatus("authStatus",error.message || String(error),true); }
+});
+
+async function loadProfile() {
+  if(!currentUser || !supabase) return;
+  try {
+    const {data,error} = await supabase.from("student_profiles").select("id,full_name,university,department,level,bio").eq("id",currentUser.id).maybeSingle();
+    if(error) throw error;
+    if(data) {
+      $("fullName").value = data.full_name || "";
+      $("university").value = data.university || "";
+      $("department").value = data.department || "";
+      $("level").value = data.level || "";
+      $("bio").value = data.bio || "";
+      setStatus("profileStatus","Your academic profile is loaded.");
+    } else {
+      setStatus("profileStatus","Add your academic details and save your profile.");
+    }
+  } catch(error) {
+    setStatus("profileStatus","Could not load profile: " + (error.message || String(error)),true);
+  }
+}
+$("saveProfileBtn").addEventListener("click", async () => {
+  try {
+    if(!currentUser) throw new Error("Please log in first.");
+    const profile = {
+      id: currentUser.id,
+      full_name: $("fullName").value.trim(),
+      university: $("university").value.trim(),
+      department: $("department").value.trim(),
+      level: $("level").value.trim(),
+      bio: $("bio").value.trim(),
+      updated_at: new Date().toISOString()
+    };
+    const {error} = await supabase.from("student_profiles").upsert(profile,{onConflict:"id"});
+    if(error) throw error;
+    setStatus("profileStatus","Your academic profile has been saved.");
+  } catch(error) {
+    setStatus("profileStatus","Could not save profile: " + (error.message || String(error)),true);
+  }
+});
+
+async function findPeople() {
+  if(!currentUser) {
+    setStatus("peopleStatus","Please log in to find people.",true);
+    return;
+  }
+  const results = $("peopleResults");
+  const term = $("connectSearch").value.trim().toLowerCase();
+  results.replaceChildren();
+  setStatus("peopleStatus","Searching profiles...");
+  try {
+    const {data:profiles,error} = await supabase.from("student_profiles")
+      .select("id,full_name,university,department,level,bio").limit(100);
+    if(error) throw error;
+    const people = (profiles || []).filter(person =>
+      person.id !== currentUser.id &&
+      [person.full_name,person.university,person.department,person.level]
+        .some(value => (value || "").toLowerCase().includes(term))
+    );
+    if(!people.length) {
+      setStatus("peopleStatus","No matching profiles found. This may mean no other profiles exist yet, or your database permissions do not allow profile discovery.");
+      return;
+    }
+    setStatus("peopleStatus",`Found ${people.length} profile(s).`);
+    for(const person of people) {
+      const card = document.createElement("div");
+      card.className = "feature";
+      const name = document.createElement("h3");
+      name.textContent = person.full_name || "Student";
+      const university = document.createElement("p");
+      university.textContent = "University: " + (person.university || "Not provided");
+      const department = document.createElement("p");
+      department.textContent = "Department: " + (person.department || "Not provided");
+      const level = document.createElement("p");
+      level.textContent = "Level: " + (person.level || "Not provided");
+      const bio = document.createElement("p");
+      bio.textContent = person.bio || "No bio added yet.";
+      const connectButton = document.createElement("button");
+      connectButton.textContent = "Send Connection Request";
+      connectButton.addEventListener("click", async () => {
+        connectButton.disabled = true;
+        connectButton.textContent = "Sending...";
+        try {
+          const {error:requestError} = await supabase.from("connections").insert({
+            sender_id:currentUser.id,recipient_id:person.id,status:"pending"
+          });
+          if(requestError) throw requestError;
+          connectButton.textContent = "Request Sent";
+          setStatus("peopleStatus","Connection request sent.");
+        } catch(error) {
+          setStatus("peopleStatus","Could not send connection request: " + (error.message || String(error)),true);
+          connectButton.disabled = false;
+          connectButton.textContent = "Send Connection Request";
+        }
+      });
+      card.append(name,university,department,level,bio,connectButton);
+      results.appendChild(card);
+    }
+  } catch(error) {
+    setStatus("peopleStatus","Could not load profiles: " + (error.message || String(error)),true);
+  }
+}
+$("findPeopleBtn").addEventListener("click", findPeople);
+$("connectSearch").addEventListener("keydown", event => { if(event.key === "Enter") findPeople(); });
+init();
+</script>
+</body>
+</html>
