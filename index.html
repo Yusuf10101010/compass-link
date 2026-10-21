@@ -1,1012 +1,661 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111827">
-  <title>Compass Link — Student Community</title>
-
-  <style>
-    :root {
-      --navy: #111827;
-      --navy-light: #1f2937;
-      --ash: #e5e7eb;
-      --muted: #9ca3af;
-      --accent: #a7f3d0;
-      --white: #f9fafb;
-      --border: #374151;
-      --danger: #fca5a5;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--navy);
-      color: var(--white);
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    header {
-      padding: 18px 6%;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .brand span { color: var(--white); }
-
-    .hero {
-      padding: 55px 6% 35px;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: clamp(30px, 6vw, 48px);
-      line-height: 1.15;
-      margin: 10px auto;
-      max-width: 750px;
-    }
-
-    .hero h1 span { color: var(--accent); }
-
-    .hero p {
-      color: var(--muted);
-      max-width: 600px;
-      margin: 16px auto;
-    }
-
-    main {
-      width: min(100% - 28px, 900px);
-      margin: 0 auto 50px;
-    }
-
-    .card {
-      background: var(--navy-light);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px;
-      margin-bottom: 18px;
-    }
-
-    h2, h3 { margin-top: 0; }
-
-    label {
-      display: block;
-      margin: 13px 0 5px;
-      color: var(--ash);
-      font-size: 14px;
-    }
-
-    input, textarea, select {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background: #111827;
-      border: 1px solid #4b5563;
-      border-radius: 9px;
-      color: white;
-      font: inherit;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    button {
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 16px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .primary {
-      background: var(--accent);
-      color: #111827;
-    }
-
-    .secondary {
-      background: #374151;
-      color: white;
-      border: 1px solid #4b5563;
-    }
-
-    .danger {
-      background: #7f1d1d;
-      color: white;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 16px;
-    }
-
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .tabs button.active {
-      background: var(--accent);
-      color: var(--navy);
-    }
-
-    .hidden { display: none !important; }
-
-    .muted { color: var(--muted); }
-
-    .notice {
-      padding: 12px;
-      margin: 12px 0;
-      border-radius: 9px;
-      background: #263449;
-      overflow-wrap: anywhere;
-    }
-
-    .notice.error {
-      color: var(--danger);
-      background: #3b2029;
-    }
-
-    .notice.success {
-      color: var(--accent);
-    }
-
-    .profile-card {
-      padding: 17px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .profile-card:first-of-type { border-top: 0; }
-
-    .profile-card h3 { margin-bottom: 5px; }
-
-    .tag {
-      display: inline-block;
-      background: #374151;
-      border-radius: 20px;
-      padding: 3px 9px;
-      font-size: 12px;
-      margin: 4px 4px 4px 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    @media (min-width: 650px) {
-      .two-columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111318">
+<title>Compass Link — Student Community</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#101216;--panel:#191c22;--panel2:#22262e;--text:#f3f4f6;--muted:#a5aab4;--line:#30343d;--accent:#d9dde5;--danger:#ff7777}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+header{background:#15171c;border-bottom:1px solid var(--line);padding:15px 18px;position:sticky;top:0;z-index:5}
+.head{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:22px;font-weight:800;letter-spacing:.3px}.logo span{color:#aeb5c2}
+.small{font-size:12px;color:var(--muted)}
+main{max-width:1050px;margin:22px auto;padding:0 14px 50px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:15px}
+h2,h3{margin-top:0}h2{font-size:22px}h3{font-size:17px}
+p{line-height:1.5}
+.muted{color:var(--muted)}
+input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);background:#111318;color:var(--text);border-radius:9px;margin:5px 0 12px}
+textarea{min-height:95px;resize:vertical}
+label{font-size:13px;color:var(--muted)}
+button.primary{background:#e0e3e9;color:#121419;border:0;border-radius:9px;padding:11px 15px;font-weight:700}
+button.secondary,.navbtn,.action{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:16px;padding-bottom:3px}
+.navbtn{white-space:nowrap}.navbtn.active{background:#e0e3e9;color:#111318}
+.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profile-card{background:#20232a;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-wrap:anywhere}
+.avatar{width:44px;height:44px;border-radius:50%;background:#363b45;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.person{display:flex;align-items:center;gap:10px}
+.post-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.post-content{white-space:pre-wrap;overflow-wrap:anywhere}
+.post-media{width:100%;max-height:450px;object-fit:contain;border-radius:10px;background:#0b0c0e;margin-top:10px}
+.comment{padding:8px 0;border-top:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}
+.status{padding:11px 13px;border-radius:9px;margin-bottom:14px;background:#242831;color:var(--text)}
+.status.error{color:#ffaaaa}
+.status.success{color:#c8f5d0}
+#authBox{max-width:480px;margin:35px auto}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:620px){.grid{grid-template-columns:1fr}main{margin-top:14px}.panel{padding:14px}.logo{font-size:19px}}
+</style>
 </head>
-
 <body>
-  <header>
-    <div class="brand">Compass <span>Link</span></div>
-    <div id="headerStatus" class="muted">Student community</div>
-  </header>
+<header>
+  <div class="head">
+    <div>
+      <div class="logo">Compass <span>Link</span></div>
+      <div class="small">Your campus. Your connections. Your community.</div>
+    </div>
+    <button id="logoutBtn" class="secondary hidden" onclick="logout()">Log out</button>
+  </div>
+</header>
 
-  <section class="hero">
-    <h1>Find Your People.<br><span>Find Your Direction.</span></h1>
-    <p>
-      Meet students from universities across Nigeria.
-      Build friendships, discover shared interests and grow together.
-    </p>
+<main>
+  <div id="message" class="status hidden" role="status"></div>
+
+  <section id="authBox" class="panel">
+    <h2>Welcome to Compass Link</h2>
+    <p class="muted">Meet students, share ideas, and build meaningful connections.</p>
+    <label for="authEmail">Email address</label>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
+    <label for="authPassword">Password</label>
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters">
+    <div class="actions">
+      <button class="primary" onclick="login()">Log in</button>
+      <button class="secondary" onclick="register()">Create account</button>
+    </div>
+    <p><button class="secondary" onclick="resetPassword()">Forgot password?</button></p>
+    <p class="small">Use an email address you can access. If email confirmation is enabled, check your inbox before logging in.</p>
   </section>
 
-  <main>
-    <div id="message" class="notice hidden" role="status"></div>
+  <section id="app" class="hidden">
+    <div class="panel">
+      <h2 id="welcome">Welcome!</h2>
+      <p class="muted">Complete your profile so other students can discover you.</p>
+    </div>
 
-    <section id="authSection" class="card">
-      <h2>Join Compass Link</h2>
-      <p class="muted">Create an account or log in to continue.</p>
+    <nav>
+      <button class="navbtn active" data-tab="feed" onclick="showTab('feed')">Feed</button>
+      <button class="navbtn" data-tab="profile" onclick="showTab('profile')">My profile</button>
+      <button class="navbtn" data-tab="find" onclick="showTab('find')">Find students</button>
+      <button class="navbtn" data-tab="connections" onclick="showTab('connections')">Connections</button>
+    </nav>
 
-      <div class="tabs">
-        <button id="showSignup" class="primary" type="button">
-          Create account
-        </button>
-        <button id="showLogin" class="secondary" type="button">
-          Log in
-        </button>
-      </div>
-
-      <form id="authForm">
-        <div id="nameField">
-          <label for="authName">Full name</label>
-          <input id="authName" autocomplete="name"
-            placeholder="Enter your full name">
-        </div>
-
-        <label for="authEmail">Email address</label>
-        <input id="authEmail" type="email" required
-          autocomplete="email" placeholder="you@example.com">
-
-        <label for="authPassword">Password</label>
-        <input id="authPassword" type="password" required
-          minlength="6" autocomplete="current-password"
-          placeholder="At least 6 characters">
-
+    <section id="tab-feed">
+      <div class="panel">
+        <h2>Share with your community</h2>
+        <textarea id="postText" maxlength="5000" placeholder="What would you like to share with students?"></textarea>
+        <label for="postFile">Add a photo or video (optional)</label>
+        <input id="postFile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4">
+        <div class="small">Supported formats: JPG, PNG, WEBP and MP4.</div>
         <div class="actions">
-          <button class="primary" id="authSubmit" type="submit">
-            Create account
-          </button>
-          <button class="secondary" id="forgotPassword"
-            type="button">Forgot password?</button>
+          <button id="publishBtn" class="primary" onclick="publishPost()">Publish post</button>
+          <button class="secondary" onclick="loadFeed()">Refresh feed</button>
         </div>
-      </form>
-
-      <p class="muted">
-        You must verify your email if email confirmation is enabled.
-        Never share your password or verification code with anyone.
-      </p>
+      </div>
+      <div id="feedList"></div>
     </section>
 
-    <section id="appSection" class="hidden">
-      <div class="card">
-        <h2 id="welcomeTitle">Welcome to Compass Link</h2>
-        <p class="muted">
-          Complete your student profile so other students can get to know you.
-        </p>
-
-        <div class="tabs">
-          <button class="secondary active" data-tab="profileTab">
-            My profile
-          </button>
-          <button class="secondary" data-tab="discoverTab">
-            Find people
-          </button>
-          <button class="secondary" data-tab="requestsTab">
-            Connections
-          </button>
-        </div>
-      </div>
-
-      <section id="profileTab" class="card">
+    <section id="tab-profile" class="hidden">
+      <div class="panel">
         <h2>My student profile</h2>
-
-        <form id="profileForm">
-          <label for="fullName">Full name</label>
-          <input id="fullName" required maxlength="100"
-            placeholder="Your name">
-
-          <label for="university">University or institution</label>
-          <input id="university" required maxlength="150"
-            placeholder="e.g. University of Abuja">
-
-          <label for="department">Department</label>
-          <input id="department" required maxlength="120"
-            placeholder="e.g. Computer Science">
-
-          <label for="course">Course of study</label>
-          <input id="course" maxlength="120"
-            placeholder="e.g. Software Engineering">
-
-          <label for="level">Academic level</label>
-          <select id="level">
-            <option value="">Select your level</option>
-            <option>100 Level</option>
-            <option>200 Level</option>
-            <option>300 Level</option>
-            <option>400 Level</option>
-            <option>500 Level</option>
-            <option>600 Level</option>
-            <option>Postgraduate</option>
-            <option>Other</option>
-          </select>
-
-          <label for="interests">Interests</label>
-          <input id="interests" maxlength="250"
-            placeholder="e.g. technology, reading, football">
-
-          <label for="bio">About me</label>
-          <textarea id="bio" maxlength="500"
-            placeholder="Tell other students a little about yourself"></textarea>
-
-          <div class="actions">
-            <button class="primary" id="saveProfile" type="submit">
-              Save profile
-            </button>
-          </div>
-        </form>
-      </section>
-
-      <section id="discoverTab" class="card hidden">
-        <h2>Find students</h2>
-        <p class="muted">
-          Discover students and send connection requests.
-        </p>
-
-        <label for="searchInput">Search by name, university or department</label>
-        <input id="searchInput" placeholder="Start typing to search">
-
-        <div class="actions">
-          <button class="primary" id="searchButton" type="button">
-            Search students
-          </button>
-        </div>
-
-        <div id="peopleResults" aria-live="polite"></div>
-      </section>
-
-      <section id="requestsTab" class="card hidden">
-        <h2>Connection requests</h2>
-        <p class="muted">
-          View your sent requests and requests from other students.
-        </p>
-
-        <div class="actions">
-          <button class="primary" id="refreshRequests" type="button">
-            Refresh requests
-          </button>
-        </div>
-
-        <div id="requestResults" aria-live="polite"></div>
-      </section>
-
-      <div class="card">
-        <h2>Account</h2>
-        <p id="accountEmail" class="muted"></p>
-        <button id="logoutButton" class="danger" type="button">
-          Log out
-        </button>
+        <label for="fullName">Full name</label>
+        <input id="fullName" maxlength="100" placeholder="Your name">
+        <label for="university">University or institution</label>
+        <input id="university" maxlength="200" placeholder="Your university">
+        <label for="department">Department</label>
+        <input id="department" maxlength="150" placeholder="Your department">
+        <label for="course">Course or programme</label>
+        <input id="course" maxlength="150" placeholder="Your course">
+        <label for="level">Level or year</label>
+        <input id="level" maxlength="50" placeholder="e.g. 200 Level">
+        <label for="interests">Interests</label>
+        <input id="interests" maxlength="500" placeholder="e.g. technology, reading, business">
+        <label for="bio">About me</label>
+        <textarea id="bio" maxlength="1500" placeholder="Tell other students a little about yourself"></textarea>
+        <button id="saveProfileBtn" class="primary" onclick="saveProfile()">Save profile</button>
       </div>
     </section>
-  </main>
 
-  <footer>
-    Compass Link · Connect. Learn. Discover.
-  </footer>
+    <section id="tab-find" class="hidden">
+      <div class="panel">
+        <h2>Find students</h2>
+        <input id="searchTerm" maxlength="150" placeholder="Search by name, university, department or course">
+        <button class="primary" onclick="searchStudents()">Search</button>
+      </div>
+      <div id="searchResults" class="grid"></div>
+    </section>
 
-  <script type="module">
-    import { createClient } from
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    <section id="tab-connections" class="hidden">
+      <div class="panel">
+        <h2>Connection requests</h2>
+        <button class="secondary" onclick="loadConnections()">Refresh requests</button>
+      </div>
+      <div id="connectionList"></div>
+    </section>
+  </section>
+</main>
 
-    // Compass Link Supabase project configuration
-    const SUPABASE_URL =
-      "https://ttvbqeswhluwsypajexu.supabase.co";
+<footer>Compass Link · Connect, learn and grow together.</footer>
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
+<script>
+const SUPABASE_URL = "https://ttvbqeswhluwsypajexu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    const supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+let currentUser = null;
+let myProfile = null;
+let busy = false;
+
+const el = id => document.getElementById(id);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+
+function say(text, type="") {
+  const box = el("message");
+  box.textContent = text;
+  box.className = "status" + (type ? " " + type : "");
+  box.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function clearMessage() {
+  el("message").classList.add("hidden");
+}
+function setBusy(value) {
+  busy = value;
+  ["publishBtn","saveProfileBtn"].forEach(id => {
+    if (el(id)) el(id).disabled = value;
+  });
+}
+function initials(name) {
+  return String(name || "Student").trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
+}
+function avatar(name) {
+  return `<div class="avatar">${esc(initials(name))}</div>`;
+}
+function profileDescription(p) {
+  return [p.university,p.department,p.course,p.level].filter(Boolean).map(esc).join(" · ");
+}
+function showTab(tab) {
+  ["feed","profile","find","connections"].forEach(name => {
+    el("tab-"+name).classList.toggle("hidden", name !== tab);
+  });
+  document.querySelectorAll(".navbtn").forEach(btn => {
+    btn.classList.toggle("active",btn.dataset.tab===tab);
+  });
+  clearMessage();
+  if (tab==="feed") loadFeed();
+  if (tab==="profile") loadProfile();
+  if (tab==="find") searchStudents();
+  if (tab==="connections") loadConnections();
+}
+
+async function register() {
+  clearMessage();
+  const email = el("authEmail").value.trim();
+  const password = el("authPassword").value;
+  if (!email || password.length < 6) return say("Enter a valid email address and a password of at least 6 characters.","error");
+  try {
+    const {data,error} = await db.auth.signUp({email,password});
+    if (error) throw error;
+    if (data.session) {
+      await startApp(data.session.user);
+      say("Your account has been created. Complete your profile to get started.","success");
+    } else {
+      say("Account created. Check your email for a confirmation link, then return here and log in.","success");
+    }
+  } catch(e) { say(e.message || "Could not create your account.","error"); }
+}
+
+async function login() {
+  clearMessage();
+  const email = el("authEmail").value.trim();
+  const password = el("authPassword").value;
+  if (!email || !password) return say("Enter your email and password.","error");
+  try {
+    const {data,error} = await db.auth.signInWithPassword({email,password});
+    if (error) throw error;
+    await startApp(data.user);
+    say("You are logged in.","success");
+  } catch(e) { say(e.message || "Login failed.","error"); }
+}
+
+async function resetPassword() {
+  const email = el("authEmail").value.trim();
+  if (!email) return say("Enter your email address first, then choose Forgot password.","error");
+  try {
+    const {error} = await db.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
+    if (error) throw error;
+    say("If password recovery is configured, check your email for the reset link.","success");
+  } catch(e) { say(e.message || "Could not send the reset email.","error"); }
+}
+
+async function logout() {
+  const {error} = await db.auth.signOut();
+  if (error) return say(error.message,"error");
+  currentUser = null;
+  myProfile = null;
+  el("app").classList.add("hidden");
+  el("logoutBtn").classList.add("hidden");
+  el("authBox").classList.remove("hidden");
+  say("You have logged out.","success");
+}
+
+async function startApp(user) {
+  currentUser = user;
+  el("authBox").classList.add("hidden");
+  el("app").classList.remove("hidden");
+  el("logoutBtn").classList.remove("hidden");
+  await loadProfile();
+  await loadFeed();
+}
+
+async function loadProfile() {
+  if (!currentUser) return;
+  try {
+    const {data,error} = await db.from("student_profiles")
+      .select("id,full_name,university,department,course,level,interests,bio")
+      .eq("id",currentUser.id).maybeSingle();
+    if (error) throw error;
+    myProfile = data;
+    el("welcome").textContent = data?.full_name ? "Welcome, "+data.full_name+"!" : "Welcome to Compass Link!";
+    el("fullName").value = data?.full_name || "";
+    el("university").value = data?.university || "";
+    el("department").value = data?.department || "";
+    el("course").value = data?.course || "";
+    el("level").value = data?.level || "";
+    el("interests").value = data?.interests || "";
+    el("bio").value = data?.bio || "";
+  } catch(e) {
+    say("Could not load your profile: "+e.message,"error");
+  }
+}
+
+async function saveProfile() {
+  if (!currentUser || busy) return;
+  const profile = {
+    id:currentUser.id,
+    full_name:el("fullName").value.trim(),
+    university:el("university").value.trim(),
+    department:el("department").value.trim(),
+    course:el("course").value.trim(),
+    level:el("level").value.trim(),
+    interests:el("interests").value.trim(),
+    bio:el("bio").value.trim(),
+    updated_at:new Date().toISOString()
+  };
+  if (!profile.full_name) return say("Please enter your full name.","error");
+  setBusy(true);
+  try {
+    const {error} = await db.from("student_profiles").upsert(profile,{onConflict:"id"});
+    if (error) throw error;
+    myProfile = profile;
+    el("welcome").textContent = "Welcome, "+profile.full_name+"!";
+    say("Your profile has been saved.","success");
+  } catch(e) {
+    say("Could not save profile: "+e.message,"error");
+  } finally { setBusy(false); }
+}
+
+async function publishPost() {
+  if (!currentUser || busy) return;
+  const content = el("postText").value.trim();
+  const file = el("postFile").files[0];
+  if (!content && !file) return say("Write something or choose a photo/video first.","error");
+  if (file && file.size > 50*1024*1024) return say("That file is larger than 50 MB.","error");
+  if (file && !["image/jpeg","image/png","image/webp","video/mp4"].includes(file.type)) {
+    return say("Please choose a JPG, PNG, WEBP or MP4 file.","error");
+  }
+  setBusy(true);
+  let mediaUrl = null;
+  let mediaType = null;
+  try {
+    if (file) {
+      say("Uploading your media...");
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const path = currentUser.id+"/"+Date.now()+"_"+safeName;
+      const {data,error} = await db.storage.from("post-media").upload(path,file,{upsert:false,contentType:file.type});
+      if (error) throw error;
+      const {data:publicData} = db.storage.from("post-media").getPublicUrl(data.path);
+      mediaUrl = publicData.publicUrl;
+      mediaType = file.type.startsWith("video/") ? "video" : "image";
+    }
+    const {data:post,error:postError} = await db.from("posts")
+      .insert({user_id:currentUser.id,content})
+      .select("id").single();
+    if (postError) throw postError;
+    if (mediaUrl) {
+      const {error} = await db.from("post_media").insert({
+        post_id:post.id,user_id:currentUser.id,media_url:mediaUrl,media_type:mediaType
+      });
+      if (error) throw error;
+    }
+    el("postText").value = "";
+    el("postFile").value = "";
+    say("Your post has been published.","success");
+    await loadFeed();
+  } catch(e) {
+    say("Could not publish your post: "+e.message+". If media upload failed, the storage permissions may need configuring.","error");
+  } finally { setBusy(false); }
+}
+
+async function loadFeed() {
+  if (!currentUser) return;
+  const target = el("feedList");
+  target.innerHTML = '<div class="panel muted">Loading posts...</div>';
+  try {
+    const {data:posts,error} = await db.from("posts")
+      .select("id,user_id,content,created_at")
+      .order("created_at",{ascending:false}).limit(50);
+    if (error) throw error;
+    if (!posts?.length) {
+      target.innerHTML = '<div class="panel"><h3>Your feed starts here</h3><p class="muted">Be the first to share something with your student community.</p></div>';
+      return;
+    }
+    const userIds = [...new Set(posts.map(p=>p.user_id))];
+    const postIds = posts.map(p=>p.id);
+    const [{data:profiles,error:profileError},{data:media,error:mediaError},{data:likes,error:likesError},{data:comments,error:commentsError}] = await Promise.all([
+      db.from("student_profiles").select("id,full_name,university").in("id",userIds),
+      db.from("post_media").select("post_id,media_url,media_type").in("post_id",postIds),
+      db.from("post_likes").select("post_id,user_id").in("post_id",postIds),
+      db.from("post_comments").select("id,post_id,user_id,content,created_at").in("post_id",postIds).order("created_at",{ascending:true})
+    ]);
+    if (profileError) throw profileError;
+    if (mediaError) throw mediaError;
+    if (likesError) throw likesError;
+    if (commentsError) throw commentsError;
+    const people = Object.fromEntries((profiles||[]).map(p=>[p.id,p]));
+    const mediaByPost = {};
+    (media||[]).forEach(m=>(mediaByPost[m.post_id] ||= []).push(m));
+    const commentsByPost = {};
+    (comments||[]).forEach(c=>(commentsByPost[c.post_id] ||= []).push(c));
+    target.innerHTML = posts.map(post=>{
+      const person = people[post.user_id] || {full_name:"Student"};
+      const postMedia = mediaByPost[post.id] || [];
+      const postLikes = (likes||[]).filter(l=>l.post_id===post.id);
+      const liked = postLikes.some(l=>l.user_id===currentUser.id);
+      const postComments = commentsByPost[post.id] || [];
+      const mediaHTML = postMedia.map(m=>m.media_type==="video"
+        ? `<video class="post-media" controls preload="metadata" src="${esc(m.media_url)}"></video>`
+        : `<img class="post-media" loading="lazy" src="${esc(m.media_url)}" alt="Post image">`).join("");
+      const commentHTML = postComments.map(c=>{
+        const author = people[c.user_id]?.full_name || (c.user_id===currentUser.id ? myProfile?.full_name : "") || "Student";
+        return `<div class="comment"><strong>${esc(author)}</strong><br>${esc(c.content)}</div>`;
+      }).join("");
+      return `<article class="panel">
+        <div class="post-head">${avatar(person.full_name)}
+          <div><strong>${esc(person.full_name || "Student")}</strong>
+          <div class="small">${esc(person.university || "Compass Link student")} · ${esc(new Date(post.created_at).toLocaleString())}</div></div>
+        </div>
+        ${post.content ? `<div class="post-content">${esc(post.content)}</div>` : ""}
+        ${mediaHTML}
+        <div class="actions">
+          <button class="action" onclick="toggleLike('${post.id}',${liked})">${liked?"♥ Liked":"♡ Like"} · ${postLikes.length}</button>
+          <button class="action" onclick="focusComment('${post.id}')">Comments · ${postComments.length}</button>
+        </div>
+        <div id="comments-${post.id}">${commentHTML}</div>
+        <div class="actions">
+          <input id="commentInput-${post.id}" maxlength="2000" placeholder="Write a comment..." style="flex:1;min-width:150px;margin:0">
+          <button class="secondary" onclick="addComment('${post.id}')">Comment</button>
+        </div>
+      </article>`;
+    }).join("");
+  } catch(e) {
+    target.innerHTML = '<div class="panel">Could not load the feed.</div>';
+    say("Could not load posts: "+e.message,"error");
+  }
+}
+
+function focusComment(id) {
+  const input = el("commentInput-"+id);
+  if (input) { input.focus(); input.scrollIntoView({behavior:"smooth",block:"center"}); }
+}
+
+async function toggleLike(postId,alreadyLiked) {
+  try {
+    if (alreadyLiked) {
+      const {error} = await db.from("post_likes").delete().eq("post_id",postId).eq("user_id",currentUser.id);
+      if (error) throw error;
+    } else {
+      const {error} = await db.from("post_likes").insert({post_id:postId,user_id:currentUser.id});
+      if (error) throw error;
+    }
+    await loadFeed();
+  } catch(e) { say("Could not update like: "+e.message,"error"); }
+}
+
+async function addComment(postId) {
+  const input = el("commentInput-"+postId);
+  const content = input?.value.trim();
+  if (!content) return say("Write a comment first.","error");
+  try {
+    const {error} = await db.from("post_comments").insert({post_id:postId,user_id:currentUser.id,content});
+    if (error) throw error;
+   try {
+    const {error} = await db.from("post_comments").insert({
+      post_id:postId,
+      user_id:currentUser.id,
+      content
+    });
+    if (error) throw error;
+    await loadFeed();
+    say("Comment added.","success");
+  } catch(e) {
+    say("Could not add comment: "+e.message,"error");
+  }
+}
+
+async function searchStudents() {
+  if (!currentUser) return;
+  const target = el("searchResults");
+  target.innerHTML = '<div class="muted">Searching students...</div>';
+
+  try {
+    let query = db.from("student_profiles")
+      .select("id,full_name,university,department,course,level,interests,bio")
+      .neq("id",currentUser.id)
+      .limit(50);
+
+    const term = el("searchTerm").value.trim();
+    if (term) {
+      const safeTerm = term.replace(/[,%()]/g," ").trim();
+      if (safeTerm) {
+        query = query.or(
+          "full_name.ilike.%"+safeTerm+
+          "%,university.ilike.%"+safeTerm+
+          "%,department.ilike.%"+safeTerm+
+          "%,course.ilike.%"+safeTerm+"%"
+        );
+      }
+    }
+
+    const {data,error} = await query;
+    if (error) throw error;
+
+    if (!data?.length) {
+      target.innerHTML = '<div class="panel">No matching student profiles found yet.</div>';
+      return;
+    }
+
+    target.innerHTML = data.map(p=>`
+      <div class="profile-card">
+        <div class="person">
+          ${avatar(p.full_name)}
+          <div>
+            <strong>${esc(p.full_name||"Student")}</strong>
+            <div class="small">${esc(p.university||"University not added")}</div>
+          </div>
+        </div>
+        <p class="muted">${profileDescription(p)||"Student profile"}</p>
+        ${p.interests?`<p><strong>Interests:</strong> ${esc(p.interests)}</p>`:""}
+        ${p.bio?`<p>${esc(p.bio)}</p>`:""}
+        <button class="primary" onclick="sendRequest('${p.id}')">Connect</button>
+      </div>
+    `).join("");
+  } catch(e) {
+    target.innerHTML = '<div class="panel">Search could not be completed.</div>';
+    say("Could not search students: "+e.message,"error");
+  }
+}
+
+async function sendRequest(recipientId) {
+  try {
+    if (recipientId===currentUser.id) return;
+
+    const {data:existing,error:checkError} = await db
+      .from("connection_requests")
+      .select("id,status,sender_id,recipient_id")
+      .or(
+        "and(sender_id.eq."+currentUser.id+
+        ",recipient_id.eq."+recipientId+
+        "),and(sender_id.eq."+recipientId+
+        ",recipient_id.eq."+currentUser.id+")"
+      );
+
+    if (checkError) throw checkError;
+
+    if (existing?.length) {
+      return say("A request or connection already exists.","error");
+    }
+
+    const {error} = await db.from("connection_requests").insert({
+      sender_id:currentUser.id,
+      recipient_id:recipientId,
+      status:"pending"
+    });
+
+    if (error) throw error;
+    say("Connection request sent.","success");
+  } catch(e) {
+    say("Could not send request: "+e.message,"error");
+  }
+}
+
+async function loadConnections() {
+  if (!currentUser) return;
+
+  const target = el("connectionList");
+  target.innerHTML = '<div class="panel muted">Loading requests...</div>';
+
+  try {
+    const {data:requests,error} = await db
+      .from("connection_requests")
+      .select("id,sender_id,recipient_id,status,created_at")
+      .or(
+        "sender_id.eq."+currentUser.id+
+        ",recipient_id.eq."+currentUser.id
+      )
+      .order("created_at",{ascending:false})
+      .limit(100);
+
+    if (error) throw error;
+
+    if (!requests?.length) {
+      target.innerHTML = '<div class="panel">No connection requests yet. Visit Find students to meet people.</div>';
+      return;
+    }
+
+    const ids = [...new Set(requests.map(r =>
+      r.sender_id===currentUser.id ? r.recipient_id : r.sender_id
+    ))];
+
+    const {data:profiles,error:profileError} = await db
+      .from("student_profiles")
+      .select("id,full_name,university,department,course")
+      .in("id",ids);
+
+    if (profileError) throw profileError;
+
+    const people = Object.fromEntries(
+      (profiles||[]).map(p=>[p.id,p])
     );
 
-    const $ = id => document.getElementById(id);
+    target.innerHTML = requests.map(r=>{
+      const incoming = r.recipient_id===currentUser.id;
+      const otherId = incoming ? r.sender_id : r.recipient_id;
+      const p = people[otherId] || {full_name:"Student"};
 
-    let currentUser = null;
-    let signupMode = true;
-    let profileCache = null;
-
-    function showMessage(message, type = "") {
-      const box = $("message");
-      box.textContent = message;
-      box.className = "notice" + (type ? " " + type : "");
-      box.classList.remove("hidden");
-      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    function clearMessage() {
-      $("message").classList.add("hidden");
-    }
-
-    function setBusy(button, busy, text) {
-      button.disabled = busy;
-      if (busy) {
-        button.dataset.oldText = button.textContent;
-        button.textContent = text || "Please wait...";
-      } else {
-        button.textContent =
-          button.dataset.oldText || button.textContent;
-      }
-    }
-
-    function safeText(value) {
-      return value == null ? "" : String(value);
-    }
-
-    function element(tag, className, text) {
-      const node = document.createElement(tag);
-      if (className) node.className = className;
-      if (text != null) node.textContent = text;
-      return node;
-    }
-
-    function addTag(parent, value) {
-      if (!value) return;
-      parent.appendChild(element("span", "tag", value));
-    }
-
-    function renderProfileCard(person, options = {}) {
-      const card = element("article", "profile-card");
-      card.appendChild(element("h3", "", person.full_name || "Student"));
-
-      if (person.university) {
-        card.appendChild(element("p", "muted", person.university));
+      let controls = "";
+      if (r.status==="pending" && incoming) {
+        controls = `
+          <div class="actions">
+            <button class="primary" onclick="respondRequest('${r.id}','accepted')">Accept</button>
+            <button class="secondary" onclick="respondRequest('${r.id}','declined')">Decline</button>
+          </div>`;
       }
 
-      const details = [
-        person.department,
-        person.course,
-        person.level
-      ].filter(Boolean);
-
-      if (details.length) {
-        card.appendChild(element("p", "", details.join(" · ")));
-      }
-
-      if (person.bio) {
-        card.appendChild(element("p", "", person.bio));
-      }
-
-      if (person.interests) {
-        const tags = element("div");
-        person.interests.split(",").map(s => s.trim())
-          .filter(Boolean).forEach(v => addTag(tags, v));
-        card.appendChild(tags);
-      }
-
-      if (options.buttonText && options.onAction) {
-        const actions = element("div", "actions");
-        const button = element(
-          "button",
-          options.buttonClass || "primary",
-          options.buttonText
-        );
-        button.type = "button";
-        button.addEventListener("click", options.onAction);
-        actions.appendChild(button);
-        card.appendChild(actions);
-      }
-
-      return card;
-    }
-
-    function setAuthMode(isSignup) {
-      signupMode = isSignup;
-      $("nameField").classList.toggle("hidden", !signupMode);
-      $("authSubmit").textContent =
-        signupMode ? "Create account" : "Log in";
-      $("showSignup").className =
-        signupMode ? "primary active" : "secondary";
-      $("showLogin").className =
-        signupMode ? "secondary" : "primary active";
-      $("authPassword").autocomplete =
-        signupMode ? "new-password" : "current-password";
-      clearMessage();
-    }
-
-    $("showSignup").addEventListener("click", () => setAuthMode(true));
-    $("showLogin").addEventListener("click", () => setAuthMode(false));
-
-    $("authForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      clearMessage();
-
-      const email = $("authEmail").value.trim();
-      const password = $("authPassword").value;
-      const name = $("authName").value.trim();
-      const button = $("authSubmit");
-
-      if (signupMode && !name) {
-        showMessage("Please enter your full name.", "error");
-        return;
-      }
-
-      setBusy(button, true);
-
-      try {
-        if (signupMode) {
-          const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: { full_name: name },
-              emailRedirectTo: window.location.origin +
-                window.location.pathname
-            }
-          });
-
-          if (error) throw error;
-
-          if (data.session) {
-            showMessage("Account created. Welcome to Compass Link!", "success");
-          } else {
-            showMessage(
-              "Registration received. Check your email and click the confirmation link before logging in.",
-              "success"
-            );
-          }
-        } else {
-          const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-          });
-
-          if (error) throw error;
-          showMessage("Login successful.", "success");
-        }
-      } catch (error) {
-        showMessage(error.message || "Authentication failed.", "error");
-      } finally {
-        setBusy(button, false);
-      }
-    });
-
-    $("forgotPassword").addEventListener("click", async () => {
-      clearMessage();
-      const email = $("authEmail").value.trim();
-
-      if (!email) {
-        showMessage("Enter your email address first.", "error");
-        $("authEmail").focus();
-        return;
-      }
-
-      try {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + window.location.pathname
-        });
-
-        if (error) throw error;
-
-        showMessage(
-          "If the address is registered, a password reset email will be sent. Check your inbox.",
-          "success"
-        );
-      } catch (error) {
-        showMessage(error.message || "Could not request password reset.", "error");
-      }
-    });
-
-    async function loadProfile() {
-      if (!currentUser) return;
-
-      const { data, error } = await supabase
-        .from("student_profiles")
-        .select("*")
-        .eq("id", currentUser.id)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      profileCache = data || null;
-
-      $("fullName").value =
-        data?.full_name || currentUser.user_metadata?.full_name || "";
-      $("university").value = data?.university || "";
-      $("department").value = data?.department || "";
-      $("course").value = data?.course || "";
-      $("level").value = data?.level || "";
-      $("interests").value = data?.interests || "";
-      $("bio").value = data?.bio || "";
-    }
-
-    $("profileForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (!currentUser) return;
-
-      const button = $("saveProfile");
-      setBusy(button, true);
-
-      const profile = {
-        id: currentUser.id,
-        full_name: $("fullName").value.trim(),
-        university: $("university").value.trim(),
-        department: $("department").value.trim(),
-        course: $("course").value.trim(),
-        level: $("level").value,
-        interests: $("interests").value.trim(),
-        bio: $("bio").value.trim(),
-        updated_at: new Date().toISOString()
-      };
-
-      try {
-        const { error } = await supabase
-          .from("student_profiles")
-          .upsert(profile, { onConflict: "id" });
-
-        if (error) throw error;
-
-        profileCache = profile;
-        $("welcomeTitle").textContent =
-          "Welcome, " + profile.full_name + "!";
-        showMessage("Your student profile has been saved.", "success");
-      } catch (error) {
-        showMessage(
-          "Could not save profile: " + error.message +
-          ". Check that the database table and permissions are configured.",
-          "error"
-        );
-      } finally {
-        setBusy(button, false);
-      }
-    });
-
-    document.querySelectorAll("[data-tab]").forEach(button => {
-      button.addEventListener("click", () => {
-        const target = button.dataset.tab;
-
-        ["profileTab", "discoverTab", "requestsTab"].forEach(id => {
-          $(id).classList.toggle("hidden", id !== target);
-        });
-
-        document.querySelectorAll("[data-tab]").forEach(tab => {
-          tab.className =
-            tab.dataset.tab === target ? "primary active" : "secondary";
-        });
-
-        clearMessage();
-
-        if (target === "discoverTab") searchPeople();
-        if (target === "requestsTab") loadRequests();
-      });
-    });
-
-    async function searchPeople() {
-      if (!currentUser) return;
-
-      const results = $("peopleResults");
-      results.replaceChildren(element("p", "muted", "Searching students..."));
-
-      const term = $("searchInput").value.trim();
-
-      try {
-        let query = supabase
-          .from("student_profiles")
-          .select("id, full_name, university, department, course, level, interests, bio")
-          .neq("id", currentUser.id)
-          .order("full_name", { ascending: true })
-          .limit(100);
-
-        if (term) {
-          const safeTerm = term.replace(/[,%()]/g, " ").trim();
-          if (safeTerm) {
-            query = query.or(
-              `full_name.ilike.%${safeTerm}%,university.ilike.%${safeTerm}%,department.ilike.%${safeTerm}%`
-            );
-          }
-        }
-
-        const { data, error } = await query;
-        if (error) throw error;
-
-        results.replaceChildren();
-
-        if (!data || data.length === 0) {
-          results.appendChild(element(
-            "p", "muted",
-            "No student profiles found. More students can join soon."
-          ));
-          return;
-        }
-
-        const { data: connections, error: connectionError } =
-          await supabase
-            .from("connection_requests")
-            .select("sender_id, recipient_id, status")
-            .or(
-              `sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`
-            );
-
-        if (connectionError) throw connectionError;
-
-        for (const person of data) {
-          const existing = (connections || []).find(request =>
-            (request.sender_id === currentUser.id &&
-              request.recipient_id === person.id) ||
-            (request.sender_id === person.id &&
-              request.recipient_id === currentUser.id)
-          );
-
-          let buttonText = "Connect";
-          let buttonClass = "primary";
-          let action = () => sendConnection(person.id);
-
-          if (existing?.status === "accepted") {
-        
-            buttonText = "Connected";
-            buttonClass = "secondary";
-            action = () =>
-              showMessage("You are already connected.", "success");
-          } else if (existing?.sender_id === currentUser.id) {
-            buttonText = "Request sent";
-            buttonClass = "secondary";
-            action = () =>
-              showMessage("Your connection request is pending.", "success");
-          } else if (existing) {
-            buttonText = "Respond in Connections";
-            buttonClass = "secondary";
-            action = () => {
-              document.querySelector('[data-tab="requestsTab"]').click();
-            };
-          }
-
-          results.appendChild(renderProfileCard(person, {
-            buttonText,
-            buttonClass,
-            onAction: action
-          }));
-        }
-      } catch (error) {
-        results.replaceChildren();
-        results.appendChild(element(
-          "p",
-          "notice error",
-          "Could not load students: " + error.message
-        ));
-      }
-    }
-
-    $("searchButton").addEventListener("click", searchPeople);
-
-    $("searchInput").addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        searchPeople();
-      }
-    });
-
-    async function sendConnection(recipientId) {
-      if (!currentUser || recipientId === currentUser.id) return;
-
-      try {
-        const { error } = await supabase
-          .from("connection_requests")
-          .insert({
-            sender_id: currentUser.id,
-            recipient_id: recipientId,
-            status: "pending"
-          });
-
-        if (error) throw error;
-
-        showMessage("Connection request sent!", "success");
-        await searchPeople();
-      } catch (error) {
-        showMessage(
-          "Could not send request: " + error.message,
-          "error"
-        );
-      }
-    }
-
-    async function loadRequests() {
-      if (!currentUser) return;
-
-      const results = $("requestResults");
-      results.replaceChildren(
-        element("p", "muted", "Loading requests...")
-      );
-
-      try {
-        const { data: requests, error } = await supabase
-          .from("connection_requests")
-          .select("*")
-          .or(
-            `sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`
-          )
-          .order("created_at", { ascending: false });
-
-        if (error) throw error;
-
-        results.replaceChildren();
-
-        if (!requests || requests.length === 0) {
-          results.appendChild(element(
-            "p",
-            "muted",
-            "You don't have any connection requests yet."
-          ));
-          return;
-        }
-
-        const otherIds = [
-          ...new Set(requests.map(request =>
-            request.sender_id === currentUser.id
-              ? request.recipient_id
-              : request.sender_id
-          ))
-        ];
-
-        const { data: people, error: peopleError } = await supabase
-          .from("student_profiles")
-          .select(
-            "id, full_name, university, department, course, level, interests, bio"
-          )
-          .in("id", otherIds);
-
-        if (peopleError) throw peopleError;
-
-        const peopleById = new Map(
-          (people || []).map(person => [person.id, person])
-        );
-
-        for (const request of requests) {
-          const incoming =
-            request.recipient_id === currentUser.id;
-
-          const personId = incoming
-            ? request.sender_id
-            : request.recipient_id;
-
-          const person = peopleById.get(personId) || {
-            full_name: "Student"
-          };
-
-          const card = renderProfileCard(person);
-
-          card.appendChild(element(
-            "p",
-            "muted",
-            (incoming ? "Incoming request · " : "Your request · ") +
-              request.status
-          ));
-
-          if (incoming && request.status === "pending") {
-            const actions = element("div", "actions");
-
-            const accept = element("button", "primary", "Accept");
-            accept.type = "button";
-            accept.addEventListener("click", () =>
-              updateRequest(request.id, "accepted")
-            );
-
-            const decline = element("button", "secondary", "Decline");
-            decline.type = "button";
-            decline.addEventListener("click", () =>
-              updateRequest(request.id, "declined")
-            );
-
-            actions.append(accept, decline);
-            card.appendChild(actions);
-          }
-
-          results.appendChild(card);
-        }
-      } catch (error) {
-        results.replaceChildren();
-        results.appendChild(element(
-          "p",
-          "notice error",
-          "Could not load requests: " + error.message
-        ));
-      }
-    }
-
-    async function updateRequest(requestId, status) {
-      try {
-        const { error } = await supabase
-          .from("connection_requests")
-          .update({ status })
-          .eq("id", requestId)
-          .eq("recipient_id", currentUser.id);
-
-        if (error) throw error;
-
-        showMessage(
-          status === "accepted"
-            ? "Connection accepted."
-            : "Request declined.",
-          "success"
-        );
-
-        await loadRequests();
-      } catch (error) {
-        showMessage(
-          "Could not update request: " + error.message,
-          "error"
-        );
-      }
-    }
-
-    $("refreshRequests").addEventListener("click", loadRequests);
-
-    $("logoutButton").addEventListener("click", async () => {
-      const { error } = await supabase.auth.signOut();
-
-      if (error) {
-        showMessage("Could not log out: " + error.message, "error");
-      }
-    });
-
-    async function showSignedInApp(user) {
-      currentUser = user;
-
-      $("authSection").classList.add("hidden");
-      $("appSection").classList.remove("hidden");
-      $("headerStatus").textContent = "Student account";
-      $("accountEmail").textContent = user.email || "";
-      $("welcomeTitle").textContent =
-        "Welcome, " +
-        (user.user_metadata?.full_name || "student") +
-        "!";
-
-      try {
-        await loadProfile();
-
-        if (profileCache?.full_name) {
-          $("welcomeTitle").textContent =
-            "Welcome, " + profileCache.full_name + "!";
-        }
-      } catch (error) {
-        showMessage(
-          "You are logged in, but your profile could not load: " +
-            error.message,
-          "error"
-        );
-      }
-    }
-
-    async function showSignedOutApp() {
-      currentUser = null;
-      profileCache = null;
-
-      $("authSection").classList.remove("hidden");
-      $("appSection").classList.add("hidden");
-      $("headerStatus").textContent = "Student community";
-    }
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        showSignedInApp(session.user);
-      } else {
-        showSignedOutApp();
-      }
-    });
-
-    const {
-      data: { session },
-      error: sessionError
-    } = await supabase.auth.getSession();
-
-    if (sessionError) {
-      showMessage(
-        "Could not check login status: " + sessionError.message,
-        "error"
-      );
-    } else if (session?.user) {
-      await showSignedInApp(session.user);
-    } else {
-      await showSignedOutApp();
-    }
-  </script>
+      const label = r.status==="accepted" ? "Connected" :
+        r.status==="declined" ? "Declined" :
+        incoming ? "Incoming request" : "Request sent";
+
+      return `
+        <div class="panel">
+          <div class="person">
+            ${avatar(p.full_name)}
+            <div>
+              <strong>${esc(p.full_name||"Student")}</strong>
+              <div class="small">${esc(p.university||"University not added")}</div>
+            </div>
+          </div>
+          <p class="muted">${esc(label)}</p>
+          ${controls}
+        </div>`;
+    }).join("");
+  } catch(e) {
+    target.innerHTML = '<div class="panel">Could not load connections.</div>';
+    say("Could not load connection requests: "+e.message,"error");
+  }
+}
+
+async function respondRequest(requestId,status) {
+  try {
+    const {error} = await db.from("connection_requests")
+      .update({status})
+      .eq("id",requestId)
+      .eq("recipient_id",currentUser.id)
+      .eq("status","pending");
+
+    if (error) throw error;
+
+    say(status==="accepted" ? "Connection accepted." : "Request declined.","success");
+    await loadConnections();
+  } catch(e) {
+    say("Could not update request: "+e.message,"error");
+  }
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+  if (session?.user && !currentUser) {
+    startApp(session.user);
+  } else if (!session?.user && currentUser) {
+    currentUser = null;
+    el("app").classList.add("hidden");
+    el("logoutBtn").classList.add("hidden");
+    el("authBox").classList.remove("hidden");
+  }
+});
+
+(async function init() {
+  const {data,error} = await db.auth.getSession();
+
+  if (error) {
+    say("Could not check login session: "+error.message,"error");
+  }
+
+  if (data?.session?.user) {
+    await startApp(data.session.user);
+  }
+})();
+</script>
 </body>
 </html>
-```
-
-**Important:** Paste this at the stopping point, and make sure the file ends with the closing `</script>`, `</body>`, and `</html>` tags shown above. Then save your changes.
-
-If you get an error after saving, send me the exact error message. The connection features also require the `connection_requests` table and appropriate Supabase security policies to exist.
