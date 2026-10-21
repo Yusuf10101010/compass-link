@@ -737,3 +737,276 @@
 
           if (existing?.status === "accepted") {
         
+            buttonText = "Connected";
+            buttonClass = "secondary";
+            action = () =>
+              showMessage("You are already connected.", "success");
+          } else if (existing?.sender_id === currentUser.id) {
+            buttonText = "Request sent";
+            buttonClass = "secondary";
+            action = () =>
+              showMessage("Your connection request is pending.", "success");
+          } else if (existing) {
+            buttonText = "Respond in Connections";
+            buttonClass = "secondary";
+            action = () => {
+              document.querySelector('[data-tab="requestsTab"]').click();
+            };
+          }
+
+          results.appendChild(renderProfileCard(person, {
+            buttonText,
+            buttonClass,
+            onAction: action
+          }));
+        }
+      } catch (error) {
+        results.replaceChildren();
+        results.appendChild(element(
+          "p",
+          "notice error",
+          "Could not load students: " + error.message
+        ));
+      }
+    }
+
+    $("searchButton").addEventListener("click", searchPeople);
+
+    $("searchInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchPeople();
+      }
+    });
+
+    async function sendConnection(recipientId) {
+      if (!currentUser || recipientId === currentUser.id) return;
+
+      try {
+        const { error } = await supabase
+          .from("connection_requests")
+          .insert({
+            sender_id: currentUser.id,
+            recipient_id: recipientId,
+            status: "pending"
+          });
+
+        if (error) throw error;
+
+        showMessage("Connection request sent!", "success");
+        await searchPeople();
+      } catch (error) {
+        showMessage(
+          "Could not send request: " + error.message,
+          "error"
+        );
+      }
+    }
+
+    async function loadRequests() {
+      if (!currentUser) return;
+
+      const results = $("requestResults");
+      results.replaceChildren(
+        element("p", "muted", "Loading requests...")
+      );
+
+      try {
+        const { data: requests, error } = await supabase
+          .from("connection_requests")
+          .select("*")
+          .or(
+            `sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`
+          )
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        results.replaceChildren();
+
+        if (!requests || requests.length === 0) {
+          results.appendChild(element(
+            "p",
+            "muted",
+            "You don't have any connection requests yet."
+          ));
+          return;
+        }
+
+        const otherIds = [
+          ...new Set(requests.map(request =>
+            request.sender_id === currentUser.id
+              ? request.recipient_id
+              : request.sender_id
+          ))
+        ];
+
+        const { data: people, error: peopleError } = await supabase
+          .from("student_profiles")
+          .select(
+            "id, full_name, university, department, course, level, interests, bio"
+          )
+          .in("id", otherIds);
+
+        if (peopleError) throw peopleError;
+
+        const peopleById = new Map(
+          (people || []).map(person => [person.id, person])
+        );
+
+        for (const request of requests) {
+          const incoming =
+            request.recipient_id === currentUser.id;
+
+          const personId = incoming
+            ? request.sender_id
+            : request.recipient_id;
+
+          const person = peopleById.get(personId) || {
+            full_name: "Student"
+          };
+
+          const card = renderProfileCard(person);
+
+          card.appendChild(element(
+            "p",
+            "muted",
+            (incoming ? "Incoming request · " : "Your request · ") +
+              request.status
+          ));
+
+          if (incoming && request.status === "pending") {
+            const actions = element("div", "actions");
+
+            const accept = element("button", "primary", "Accept");
+            accept.type = "button";
+            accept.addEventListener("click", () =>
+              updateRequest(request.id, "accepted")
+            );
+
+            const decline = element("button", "secondary", "Decline");
+            decline.type = "button";
+            decline.addEventListener("click", () =>
+              updateRequest(request.id, "declined")
+            );
+
+            actions.append(accept, decline);
+            card.appendChild(actions);
+          }
+
+          results.appendChild(card);
+        }
+      } catch (error) {
+        results.replaceChildren();
+        results.appendChild(element(
+          "p",
+          "notice error",
+          "Could not load requests: " + error.message
+        ));
+      }
+    }
+
+    async function updateRequest(requestId, status) {
+      try {
+        const { error } = await supabase
+          .from("connection_requests")
+          .update({ status })
+          .eq("id", requestId)
+          .eq("recipient_id", currentUser.id);
+
+        if (error) throw error;
+
+        showMessage(
+          status === "accepted"
+            ? "Connection accepted."
+            : "Request declined.",
+          "success"
+        );
+
+        await loadRequests();
+      } catch (error) {
+        showMessage(
+          "Could not update request: " + error.message,
+          "error"
+        );
+      }
+    }
+
+    $("refreshRequests").addEventListener("click", loadRequests);
+
+    $("logoutButton").addEventListener("click", async () => {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        showMessage("Could not log out: " + error.message, "error");
+      }
+    });
+
+    async function showSignedInApp(user) {
+      currentUser = user;
+
+      $("authSection").classList.add("hidden");
+      $("appSection").classList.remove("hidden");
+      $("headerStatus").textContent = "Student account";
+      $("accountEmail").textContent = user.email || "";
+      $("welcomeTitle").textContent =
+        "Welcome, " +
+        (user.user_metadata?.full_name || "student") +
+        "!";
+
+      try {
+        await loadProfile();
+
+        if (profileCache?.full_name) {
+          $("welcomeTitle").textContent =
+            "Welcome, " + profileCache.full_name + "!";
+        }
+      } catch (error) {
+        showMessage(
+          "You are logged in, but your profile could not load: " +
+            error.message,
+          "error"
+        );
+      }
+    }
+
+    async function showSignedOutApp() {
+      currentUser = null;
+      profileCache = null;
+
+      $("authSection").classList.remove("hidden");
+      $("appSection").classList.add("hidden");
+      $("headerStatus").textContent = "Student community";
+    }
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        showSignedInApp(session.user);
+      } else {
+        showSignedOutApp();
+      }
+    });
+
+    const {
+      data: { session },
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      showMessage(
+        "Could not check login status: " + sessionError.message,
+        "error"
+      );
+    } else if (session?.user) {
+      await showSignedInApp(session.user);
+    } else {
+      await showSignedOutApp();
+    }
+  </script>
+</body>
+</html>
+```
+
+**Important:** Paste this at the stopping point, and make sure the file ends with the closing `</script>`, `</body>`, and `</html>` tags shown above. Then save your changes.
+
+If you get an error after saving, send me the exact error message. The connection features also require the `connection_requests` table and appropriate Supabase security policies to exist.
