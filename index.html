@@ -2,247 +2,258 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111318">
-<title>Compass Link — Student Community</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101216">
+<title>Compass Link</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#101216;--panel:#191c22;--panel2:#22262e;--text:#f3f4f6;--muted:#a5aab4;--line:#30343d;--accent:#d9dde5;--danger:#ff7777}
+:root{color-scheme:dark;--bg:#101216;--panel:#191c22;--line:#30343d;--text:#f3f4f6;--muted:#a5aab4}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-header{background:#15171c;border-bottom:1px solid var(--line);padding:15px 18px;position:sticky;top:0;z-index:5}
-.head{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-size:22px;font-weight:800;letter-spacing:.3px}.logo span{color:#aeb5c2}
-.small{font-size:12px;color:var(--muted)}
-main{max-width:1050px;margin:22px auto;padding:0 14px 50px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:15px}
-h2,h3{margin-top:0}h2{font-size:22px}h3{font-size:17px}
-p{line-height:1.5}
-.muted{color:var(--muted)}
-input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);background:#111318;color:var(--text);border-radius:9px;margin:5px 0 12px}
-textarea{min-height:95px;resize:vertical}
+header{position:sticky;top:0;background:#15171c;border-bottom:1px solid var(--line);padding:15px;z-index:2}
+.head,main{max-width:850px;margin:auto}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:22px;font-weight:bold}.logo span{color:#aeb5c2}
+.small,.muted{color:var(--muted);font-size:13px}
+main{padding:18px 12px 40px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+h2{font-size:21px;margin-top:0}h3{font-size:17px}
+input,textarea{display:block;width:100%;padding:12px;margin:7px 0 14px;border:1px solid var(--line);border-radius:9px;background:#101216;color:var(--text);font:inherit}
+textarea{min-height:90px;resize:vertical}
 label{font-size:13px;color:var(--muted)}
-button.primary{background:#e0e3e9;color:#121419;border:0;border-radius:9px;padding:11px 15px;font-weight:700}
-button.secondary,.navbtn,.action{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
-button:disabled{opacity:.5;cursor:not-allowed}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:16px;padding-bottom:3px}
+button{font:inherit;cursor:pointer;border-radius:9px;padding:10px 13px}
+.primary{background:#e0e3e9;color:#111318;border:0;font-weight:bold}
+.secondary,.navbtn,.action{background:#242831;color:var(--text);border:1px solid var(--line)}
+button:disabled{opacity:.6}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:15px}
 .navbtn{white-space:nowrap}.navbtn.active{background:#e0e3e9;color:#111318}
 .hidden{display:none!important}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.profile-card{background:#20232a;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-wrap:anywhere}
-.avatar{width:44px;height:44px;border-radius:50%;background:#363b45;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.person{display:flex;align-items:center;gap:10px}
-.post-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.post-content{white-space:pre-wrap;overflow-wrap:anywhere}
-.post-media{width:100%;max-height:450px;object-fit:contain;border-radius:10px;background:#0b0c0e;margin-top:10px}
-.comment{padding:8px 0;border-top:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}
-.status{padding:11px 13px;border-radius:9px;margin-bottom:14px;background:#242831;color:var(--text)}
-.status.error{color:#ffaaaa}
-.status.success{color:#c8f5d0}
 #authBox{max-width:480px;margin:35px auto}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-@media(max-width:620px){.grid{grid-template-columns:1fr}main{margin-top:14px}.panel{padding:14px}.logo{font-size:19px}}
+.status{padding:12px;border-radius:9px;margin-bottom:12px;background:#242831;overflow-wrap:anywhere}
+.error{color:#ffaaaa}.success{color:#c8f5d0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.profile-card{background:#20232a;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-wrap:anywhere}
+.person,.post-head{display:flex;align-items:center;gap:10px}
+.avatar{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:#363b45;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.post-content{white-space:pre-wrap;overflow-wrap:anywhere}
+.post-media{width:100%;max-height:450px;object-fit:contain;border-radius:10px;background:#090a0c;margin-top:10px}
+.comment{border-top:1px solid var(--line);padding:9px 0;overflow-wrap:anywhere}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
 <header>
-  <div class="head">
-    <div>
-      <div class="logo">Compass <span>Link</span></div>
-      <div class="small">Your campus. Your connections. Your community.</div>
-    </div>
-    <button id="logoutBtn" class="secondary hidden" onclick="logout()">Log out</button>
-  </div>
+<div class="head">
+<div><div class="logo">Compass <span>Link</span></div>
+<div class="small">Your campus. Your connections. Your community.</div></div>
+<button id="logoutBtn" class="secondary hidden" onclick="logout()">Log out</button>
+</div>
 </header>
 
 <main>
-  <div id="message" class="status hidden" role="status"></div>
+<div id="message" class="status hidden"></div>
 
-  <section id="authBox" class="panel">
-    <h2>Welcome to Compass Link</h2>
-    <p class="muted">Meet students, share ideas, and build meaningful connections.</p>
-    <label for="authEmail">Email address</label>
-    <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
-    <label for="authPassword">Password</label>
-    <input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters">
-    <div class="actions">
-      <button class="primary" onclick="login()">Log in</button>
-      <button class="secondary" onclick="register()">Create account</button>
-    </div>
-    <p><button class="secondary" onclick="resetPassword()">Forgot password?</button></p>
-    <p class="small">Use an email address you can access. If email confirmation is enabled, check your inbox before logging in.</p>
-  </section>
+<section id="authBox" class="panel">
+<h2>Welcome to Compass Link</h2>
+<p class="muted">Meet students, share ideas, and build meaningful connections.</p>
+<label for="email">Email address</label>
+<input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+<label for="password">Password</label>
+<input id="password" type="password" autocomplete="current-password" placeholder="Your password">
+<div class="actions">
+<button class="primary" onclick="login()">Log in</button>
+<button class="secondary" onclick="register()">Create account</button>
+</div>
+<p><button class="secondary" onclick="resetPassword()">Forgot password?</button></p>
+<p class="small">Use an email address you can access. Check your inbox if email confirmation is required.</p>
+</section>
 
-  <section id="app" class="hidden">
-    <div class="panel">
-      <h2 id="welcome">Welcome!</h2>
-      <p class="muted">Complete your profile so other students can discover you.</p>
-    </div>
+<section id="app" class="hidden">
+<div class="panel">
+<h2 id="welcome">Welcome!</h2>
+<p class="muted">Connect with students and share with your community.</p>
+</div>
+<nav>
+<button class="navbtn active" data-tab="feed" onclick="showTab('feed')">Feed</button>
+<button class="navbtn" data-tab="profile" onclick="showTab('profile')">My profile</button>
+<button class="navbtn" data-tab="find" onclick="showTab('find')">Find students</button>
+<button class="navbtn" data-tab="connections" onclick="showTab('connections')">Connections</button>
+</nav>
 
-    <nav>
-      <button class="navbtn active" data-tab="feed" onclick="showTab('feed')">Feed</button>
-      <button class="navbtn" data-tab="profile" onclick="showTab('profile')">My profile</button>
-      <button class="navbtn" data-tab="find" onclick="showTab('find')">Find students</button>
-      <button class="navbtn" data-tab="connections" onclick="showTab('connections')">Connections</button>
-    </nav>
+<section id="tab-feed">
+<div class="panel">
+<h2>Create a post</h2>
+<textarea id="postText" maxlength="5000" placeholder="What would you like to share?"></textarea>
+<label for="postFile">Add a photo or MP4 video (optional)</label>
+<input id="postFile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4">
+<p class="small">Maximum file size: 50 MB.</p>
+<button id="publishBtn" class="primary" onclick="publishPost()">Publish post</button>
+<button class="secondary" onclick="loadFeed()">Refresh feed</button>
+</div>
+<div id="feedList"></div>
+</section>
 
-    <section id="tab-feed">
-      <div class="panel">
-        <h2>Share with your community</h2>
-        <textarea id="postText" maxlength="5000" placeholder="What would you like to share with students?"></textarea>
-        <label for="postFile">Add a photo or video (optional)</label>
-        <input id="postFile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4">
-        <div class="small">Supported formats: JPG, PNG, WEBP and MP4.</div>
-        <div class="actions">
-          <button id="publishBtn" class="primary" onclick="publishPost()">Publish post</button>
-          <button class="secondary" onclick="loadFeed()">Refresh feed</button>
-        </div>
-      </div>
-      <div id="feedList"></div>
-    </section>
+<section id="tab-profile" class="hidden">
+<div class="panel">
+<h2>My student profile</h2>
+<label for="fullName">Full name</label>
+<input id="fullName" maxlength="100" placeholder="Your name">
+<label for="university">University</label>
+<input id="university" maxlength="200" placeholder="Your university">
+<label for="department">Department</label>
+<input id="department" maxlength="150" placeholder="Your department">
+<label for="course">Course or programme</label>
+<input id="course" maxlength="150" placeholder="Your course">
+<label for="level">Level</label>
+<input id="level" maxlength="50" placeholder="e.g. 200 Level">
+<label for="interests">Interests</label>
+<input id="interests" maxlength="500" placeholder="Your interests">
+<label for="bio">About me</label>
+<textarea id="bio" maxlength="1500" placeholder="Tell other students about yourself"></textarea>
+<button id="saveBtn" class="primary" onclick="saveProfile()">Save profile</button>
+</div>
+</section>
 
-    <section id="tab-profile" class="hidden">
-      <div class="panel">
-        <h2>My student profile</h2>
-        <label for="fullName">Full name</label>
-        <input id="fullName" maxlength="100" placeholder="Your name">
-        <label for="university">University or institution</label>
-        <input id="university" maxlength="200" placeholder="Your university">
-        <label for="department">Department</label>
-        <input id="department" maxlength="150" placeholder="Your department">
-        <label for="course">Course or programme</label>
-        <input id="course" maxlength="150" placeholder="Your course">
-        <label for="level">Level or year</label>
-        <input id="level" maxlength="50" placeholder="e.g. 200 Level">
-        <label for="interests">Interests</label>
-        <input id="interests" maxlength="500" placeholder="e.g. technology, reading, business">
-        <label for="bio">About me</label>
-        <textarea id="bio" maxlength="1500" placeholder="Tell other students a little about yourself"></textarea>
-        <button id="saveProfileBtn" class="primary" onclick="saveProfile()">Save profile</button>
-      </div>
-    </section>
+<section id="tab-find" class="hidden">
+<div class="panel">
+<h2>Find students</h2>
+<input id="searchTerm" maxlength="100" placeholder="Search name, university, department or course">
+<button class="primary" onclick="searchStudents()">Search</button>
+</div>
+<div id="searchResults" class="grid"></div>
+</section>
 
-    <section id="tab-find" class="hidden">
-      <div class="panel">
-        <h2>Find students</h2>
-        <input id="searchTerm" maxlength="150" placeholder="Search by name, university, department or course">
-        <button class="primary" onclick="searchStudents()">Search</button>
-      </div>
-      <div id="searchResults" class="grid"></div>
-    </section>
-
-    <section id="tab-connections" class="hidden">
-      <div class="panel">
-        <h2>Connection requests</h2>
-        <button class="secondary" onclick="loadConnections()">Refresh requests</button>
-      </div>
-      <div id="connectionList"></div>
-    </section>
-  </section>
+<section id="tab-connections" class="hidden">
+<div class="panel">
+<h2>Connections</h2>
+<button class="secondary" onclick="loadConnections()">Refresh requests</button>
+</div>
+<div id="connectionList"></div>
+</section>
+</section>
 </main>
-
 <footer>Compass Link · Connect, learn and grow together.</footer>
 
 <script>
+"use strict";
+
 const SUPABASE_URL = "https://ttvbqeswhluwsypajexu.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_e6wd2Pl5XgRewevV2f8Sbw_45I7_Mrm";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let currentUser = null;
 let myProfile = null;
-let busy = false;
+let starting = false;
 
 const el = id => document.getElementById(id);
-const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
 
-function say(text, type="") {
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function say(message, type="") {
   const box = el("message");
-  box.textContent = text;
+  box.textContent = message;
   box.className = "status" + (type ? " " + type : "");
   box.classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
 }
+
 function clearMessage() {
   el("message").classList.add("hidden");
 }
-function setBusy(value) {
-  busy = value;
-  ["publishBtn","saveProfileBtn"].forEach(id => {
-    if (el(id)) el(id).disabled = value;
-  });
-}
+
 function initials(name) {
-  return String(name || "Student").trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
+  return String(name || "Student").trim().split(/\s+/).slice(0,2)
+    .map(s=>s[0] || "").join("").toUpperCase();
 }
+
 function avatar(name) {
   return `<div class="avatar">${esc(initials(name))}</div>`;
 }
-function profileDescription(p) {
-  return [p.university,p.department,p.course,p.level].filter(Boolean).map(esc).join(" · ");
-}
-function showTab(tab) {
-  ["feed","profile","find","connections"].forEach(name => {
-    el("tab-"+name).classList.toggle("hidden", name !== tab);
-  });
-  document.querySelectorAll(".navbtn").forEach(btn => {
-    btn.classList.toggle("active",btn.dataset.tab===tab);
-  });
-  clearMessage();
-  if (tab==="feed") loadFeed();
-  if (tab==="profile") loadProfile();
-  if (tab==="find") searchStudents();
-  if (tab==="connections") loadConnections();
-}
 
-async function register() {
-  clearMessage();
-  const email = el("authEmail").value.trim();
-  const password = el("authPassword").value;
-  if (!email || password.length < 6) return say("Enter a valid email address and a password of at least 6 characters.","error");
-  try {
-    const {data,error} = await db.auth.signUp({email,password});
-    if (error) throw error;
-    if (data.session) {
-      await startApp(data.session.user);
-      say("Your account has been created. Complete your profile to get started.","success");
-    } else {
-      say("Account created. Check your email for a confirmation link, then return here and log in.","success");
-    }
-  } catch(e) { say(e.message || "Could not create your account.","error"); }
+function profileInfo(p) {
+  return [p.university,p.department,p.course,p.level]
+    .filter(Boolean).map(esc).join(" · ");
 }
 
 async function login() {
   clearMessage();
-  const email = el("authEmail").value.trim();
-  const password = el("authPassword").value;
-  if (!email || !password) return say("Enter your email and password.","error");
+  const email = el("email").value.trim();
+  const password = el("password").value;
+
+  if (!email || !password) {
+    say("Enter your email address and password.","error");
+    return;
+  }
+
+  const button = document.querySelector('#authBox button.primary');
+  button.disabled = true;
+  button.textContent = "Logging in...";
+
   try {
     const {data,error} = await db.auth.signInWithPassword({email,password});
     if (error) throw error;
     await startApp(data.user);
     say("You are logged in.","success");
-  } catch(e) { say(e.message || "Login failed.","error"); }
+  } catch(e) {
+    say("Login failed: " + (e.message || "Please try again."),"error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Log in";
+  }
+}
+
+async function register() {
+  clearMessage();
+  const email = el("email").value.trim();
+  const password = el("password").value;
+
+  if (!email || password.length < 6) {
+    say("Enter a valid email and a password of at least 6 characters.","error");
+    return;
+  }
+
+  try {
+    const {data,error} = await db.auth.signUp({email,password});
+    if (error) throw error;
+
+    if (data.session && data.user) {
+      await startApp(data.user);
+      say("Account created. Complete your student profile.","success");
+    } else {
+      say("Account created. Check your email for a confirmation link, then log in.","success");
+    }
+  } catch(e) {
+    say("Registration failed: " + e.message,"error");
+  }
 }
 
 async function resetPassword() {
-  const email = el("authEmail").value.trim();
-  if (!email) return say("Enter your email address first, then choose Forgot password.","error");
+  const email = el("email").value.trim();
+  if (!email) {
+    say("Enter your email address first.","error");
+    return;
+  }
   try {
-    const {error} = await db.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
+    const {error} = await db.auth.resetPasswordForEmail(email,{
+      redirectTo:location.href.split("#")[0]
+    });
     if (error) throw error;
-    say("If password recovery is configured, check your email for the reset link.","success");
-  } catch(e) { say(e.message || "Could not send the reset email.","error"); }
+    say("If password recovery is configured, check your email.","success");
+  } catch(e) {
+    say("Could not send reset email: "+e.message,"error");
+  }
 }
 
 async function logout() {
   const {error} = await db.auth.signOut();
-  if (error) return say(error.message,"error");
+  if (error) {
+    say(error.message,"error");
+    return;
+  }
   currentUser = null;
   myProfile = null;
   el("app").classList.add("hidden");
@@ -252,6 +263,7 @@ async function logout() {
 }
 
 async function startApp(user) {
+  if (!user) return;
   currentUser = user;
   el("authBox").classList.add("hidden");
   el("app").classList.remove("hidden");
@@ -260,30 +272,50 @@ async function startApp(user) {
   await loadFeed();
 }
 
+function showTab(tab) {
+  ["feed","profile","find","connections"].forEach(name=>{
+    el("tab-"+name).classList.toggle("hidden",name!==tab);
+  });
+  document.querySelectorAll(".navbtn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.tab===tab);
+  });
+  clearMessage();
+  if (tab==="feed") loadFeed();
+  if (tab==="profile") loadProfile();
+  if (tab==="find") searchStudents();
+  if (tab==="connections") loadConnections();
+}
+
 async function loadProfile() {
   if (!currentUser) return;
+
   try {
     const {data,error} = await db.from("student_profiles")
       .select("id,full_name,university,department,course,level,interests,bio")
       .eq("id",currentUser.id).maybeSingle();
+
     if (error) throw error;
     myProfile = data;
-    el("welcome").textContent = data?.full_name ? "Welcome, "+data.full_name+"!" : "Welcome to Compass Link!";
-    el("fullName").value = data?.full_name || "";
-    el("university").value = data?.university || "";
-    el("department").value = data?.department || "";
-    el("course").value = data?.course || "";
-    el("level").value = data?.level || "";
-    el("interests").value = data?.interests || "";
-    el("bio").value = data?.bio || "";
+
+    el("welcome").textContent = data?.full_name
+      ? "Welcome, "+data.full_name+"!" : "Welcome to Compass Link!";
+
+    ["full_name","university","department","course","level","interests","bio"]
+      .forEach(key=>{
+        const field = key==="full_name" ? "fullName" : key;
+        el(field).value = data?.[key] || "";
+      });
   } catch(e) {
-    say("Could not load your profile: "+e.message,"error");
+    say("Could not load profile: "+e.message,"error");
   }
 }
 
 async function saveProfile() {
-  if (!currentUser || busy) return;
-  const profile = {
+  if (!currentUser) return;
+  const button = el("saveBtn");
+  button.disabled = true;
+
+  const p = {
     id:currentUser.id,
     full_name:el("fullName").value.trim(),
     university:el("university").value.trim(),
@@ -294,158 +326,196 @@ async function saveProfile() {
     bio:el("bio").value.trim(),
     updated_at:new Date().toISOString()
   };
-  if (!profile.full_name) return say("Please enter your full name.","error");
-  setBusy(true);
+
+  if (!p.full_name) {
+    button.disabled = false;
+    say("Enter your full name first.","error");
+    return;
+  }
+
   try {
-    const {error} = await db.from("student_profiles").upsert(profile,{onConflict:"id"});
+    const {error} = await db.from("student_profiles")
+      .upsert(p,{onConflict:"id"});
     if (error) throw error;
-    myProfile = profile;
-    el("welcome").textContent = "Welcome, "+profile.full_name+"!";
-    say("Your profile has been saved.","success");
+    myProfile = p;
+    el("welcome").textContent = "Welcome, "+p.full_name+"!";
+    say("Profile saved.","success");
   } catch(e) {
     say("Could not save profile: "+e.message,"error");
-  } finally { setBusy(false); }
+  } finally {
+    button.disabled = false;
+  }
 }
 
 async function publishPost() {
-  if (!currentUser || busy) return;
+  if (!currentUser) return;
+  const button = el("publishBtn");
   const content = el("postText").value.trim();
   const file = el("postFile").files[0];
-  if (!content && !file) return say("Write something or choose a photo/video first.","error");
-  if (file && file.size > 50*1024*1024) return say("That file is larger than 50 MB.","error");
-  if (file && !["image/jpeg","image/png","image/webp","video/mp4"].includes(file.type)) {
-    return say("Please choose a JPG, PNG, WEBP or MP4 file.","error");
+
+  if (!content && !file) {
+    say("Write a post or select a photo/video.","error");
+    return;
   }
-  setBusy(true);
-  let mediaUrl = null;
-  let mediaType = null;
+  if (file && file.size > 50*1024*1024) {
+    say("Your file is larger than 50 MB.","error");
+    return;
+  }
+  if (file && !["image/jpeg","image/png","image/webp","video/mp4"].includes(file.type)) {
+    say("Choose a JPG, PNG, WEBP or MP4 file.","error");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Publishing...";
+
   try {
+    let mediaUrl = null;
+    let mediaType = null;
+
     if (file) {
-      say("Uploading your media...");
+      say("Uploading media...");
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
       const path = currentUser.id+"/"+Date.now()+"_"+safeName;
-      const {data,error} = await db.storage.from("post-media").upload(path,file,{upsert:false,contentType:file.type});
+
+      const {data,error} = await db.storage.from("post-media")
+        .upload(path,file,{upsert:false,contentType:file.type});
       if (error) throw error;
-      const {data:publicData} = db.storage.from("post-media").getPublicUrl(data.path);
-      mediaUrl = publicData.publicUrl;
+
+      mediaUrl = db.storage.from("post-media").getPublicUrl(data.path).data.publicUrl;
       mediaType = file.type.startsWith("video/") ? "video" : "image";
     }
+
     const {data:post,error:postError} = await db.from("posts")
       .insert({user_id:currentUser.id,content})
       .select("id").single();
+
     if (postError) throw postError;
+
     if (mediaUrl) {
       const {error} = await db.from("post_media").insert({
-        post_id:post.id,user_id:currentUser.id,media_url:mediaUrl,media_type:mediaType
+        post_id:post.id,
+        user_id:currentUser.id,
+        media_url:mediaUrl,
+        media_type:mediaType
       });
       if (error) throw error;
     }
+
     el("postText").value = "";
     el("postFile").value = "";
-    say("Your post has been published.","success");
+    say("Post published.","success");
     await loadFeed();
   } catch(e) {
-    say("Could not publish your post: "+e.message+". If media upload failed, the storage permissions may need configuring.","error");
-  } finally { setBusy(false); }
+    say("Could not publish: "+e.message+". Media uploads may require Storage permissions.","error");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Publish post";
+  }
 }
 
 async function loadFeed() {
   if (!currentUser) return;
   const target = el("feedList");
-  target.innerHTML = '<div class="panel muted">Loading posts...</div>';
+  target.innerHTML = '<div class="panel">Loading posts...</div>';
+
   try {
     const {data:posts,error} = await db.from("posts")
       .select("id,user_id,content,created_at")
       .order("created_at",{ascending:false}).limit(50);
     if (error) throw error;
+
     if (!posts?.length) {
-      target.innerHTML = '<div class="panel"><h3>Your feed starts here</h3><p class="muted">Be the first to share something with your student community.</p></div>';
+      target.innerHTML = '<div class="panel"><h3>Your feed starts here</h3><p class="muted">Be the first to share with your community.</p></div>';
       return;
     }
+
+    const ids = posts.map(p=>p.id);
     const userIds = [...new Set(posts.map(p=>p.user_id))];
-    const postIds = posts.map(p=>p.id);
-    const [{data:profiles,error:profileError},{data:media,error:mediaError},{data:likes,error:likesError},{data:comments,error:commentsError}] = await Promise.all([
+
+    const [pr,mr,lr,cr] = await Promise.all([
       db.from("student_profiles").select("id,full_name,university").in("id",userIds),
-      db.from("post_media").select("post_id,media_url,media_type").in("post_id",postIds),
-      db.from("post_likes").select("post_id,user_id").in("post_id",postIds),
-      db.from("post_comments").select("id,post_id,user_id,content,created_at").in("post_id",postIds).order("created_at",{ascending:true})
+      db.from("post_media").select("post_id,media_url,media_type").in("post_id",ids),
+      db.from("post_likes").select("post_id,user_id").in("post_id",ids),
+      db.from("post_comments").select("id,post_id,user_id,content,created_at").in("post_id",ids).order("created_at")
     ]);
-    if (profileError) throw profileError;
-    if (mediaError) throw mediaError;
-    if (likesError) throw likesError;
-    if (commentsError) throw commentsError;
-    const people = Object.fromEntries((profiles||[]).map(p=>[p.id,p]));
-    const mediaByPost = {};
-    (media||[]).forEach(m=>(mediaByPost[m.post_id] ||= []).push(m));
-    const commentsByPost = {};
-    (comments||[]).forEach(c=>(commentsByPost[c.post_id] ||= []).push(c));
+
+    for (const r of [pr,mr,lr,cr]) if (r.error) throw r.error;
+
+    const people = Object.fromEntries((pr.data||[]).map(p=>[p.id,p]));
+    const media = mr.data||[], likes = lr.data||[], comments = cr.data||[];
+
     target.innerHTML = posts.map(post=>{
       const person = people[post.user_id] || {full_name:"Student"};
-      const postMedia = mediaByPost[post.id] || [];
-      const postLikes = (likes||[]).filter(l=>l.post_id===post.id);
-      const liked = postLikes.some(l=>l.user_id===currentUser.id);
-      const postComments = commentsByPost[post.id] || [];
-      const mediaHTML = postMedia.map(m=>m.media_type==="video"
+      const pm = media.filter(m=>m.post_id===post.id);
+      const pl = likes.filter(l=>l.post_id===post.id);
+      const pc = comments.filter(c=>c.post_id===post.id);
+      const liked = pl.some(l=>l.user_id===currentUser.id);
+
+      const mediaHTML = pm.map(m=>m.media_type==="video"
         ? `<video class="post-media" controls preload="metadata" src="${esc(m.media_url)}"></video>`
-        : `<img class="post-media" loading="lazy" src="${esc(m.media_url)}" alt="Post image">`).join("");
-      const commentHTML = postComments.map(c=>{
-        const author = people[c.user_id]?.full_name || (c.user_id===currentUser.id ? myProfile?.full_name : "") || "Student";
+        : `<img class="post-media" loading="lazy" src="${esc(m.media_url)}" alt="Post photo">`
+      ).join("");
+
+      const commentHTML = pc.map(c=>{
+        const author = people[c.user_id]?.full_name || "Student";
         return `<div class="comment"><strong>${esc(author)}</strong><br>${esc(c.content)}</div>`;
       }).join("");
+
       return `<article class="panel">
         <div class="post-head">${avatar(person.full_name)}
-          <div><strong>${esc(person.full_name || "Student")}</strong>
-          <div class="small">${esc(person.university || "Compass Link student")} · ${esc(new Date(post.created_at).toLocaleString())}</div></div>
+          <div><strong>${esc(person.full_name||"Student")}</strong>
+          <div class="small">${esc(person.university||"Compass Link student")} · ${esc(new Date(post.created_at).toLocaleString())}</div></div>
         </div>
-        ${post.content ? `<div class="post-content">${esc(post.content)}</div>` : ""}
+        ${post.content?`<div class="post-content">${esc(post.content)}</div>`:""}
         ${mediaHTML}
         <div class="actions">
-          <button class="action" onclick="toggleLike('${post.id}',${liked})">${liked?"♥ Liked":"♡ Like"} · ${postLikes.length}</button>
-          <button class="action" onclick="focusComment('${post.id}')">Comments · ${postComments.length}</button>
+          <button class="action" onclick="toggleLike('${post.id}',${liked})">${liked?"♥ Liked":"♡ Like"} · ${pl.length}</button>
+          <button class="action" onclick="focusComment('${post.id}')">Comments · ${pc.length}</button>
         </div>
-        <div id="comments-${post.id}">${commentHTML}</div>
+        <div>${commentHTML}</div>
         <div class="actions">
-          <input id="commentInput-${post.id}" maxlength="2000" placeholder="Write a comment..." style="flex:1;min-width:150px;margin:0">
+          <input id="comment-${post.id}" maxlength="2000" placeholder="Write a comment..." style="flex:1;min-width:130px;margin:0">
           <button class="secondary" onclick="addComment('${post.id}')">Comment</button>
         </div>
       </article>`;
     }).join("");
   } catch(e) {
-    target.innerHTML = '<div class="panel">Could not load the feed.</div>';
-    say("Could not load posts: "+e.message,"error");
+    target.innerHTML = '<div class="panel">Could not load posts.</div>';
+    say("Feed error: "+e.message,"error");
   }
 }
 
 function focusComment(id) {
-  const input = el("commentInput-"+id);
-  if (input) { input.focus(); input.scrollIntoView({behavior:"smooth",block:"center"}); }
+  const input = el("comment-"+id);
+  if (input) {
+    input.focus();
+    input.scrollIntoView({behavior:"smooth",block:"center"});
+  }
 }
 
 async function toggleLike(postId,alreadyLiked) {
   try {
-    if (alreadyLiked) {
-      const {error} = await db.from("post_likes").delete().eq("post_id",postId).eq("user_id",currentUser.id);
-      if (error) throw error;
-    } else {
-      const {error} = await db.from("post_likes").insert({post_id:postId,user_id:currentUser.id});
-      if (error) throw error;
-    }
+    const result = alreadyLiked
+      ? await db.from("post_likes").delete().eq("post_id",postId).eq("user_id",currentUser.id)
+      : await db.from("post_likes").insert({post_id:postId,user_id:currentUser.id});
+    if (result.error) throw result.error;
     await loadFeed();
-  } catch(e) { say("Could not update like: "+e.message,"error"); }
+  } catch(e) {
+    say("Could not update like: "+e.message,"error");
+  }
 }
 
 async function addComment(postId) {
-  const input = el("commentInput-"+postId);
-  const content = input?.value.trim();
-  if (!content) return say("Write a comment first.","error");
+  const input = el("comment-"+postId);
+  const content = input.value.trim();
+  if (!content) {
+    say("Write a comment first.","error");
+    return;
+  }
   try {
-    const {error} = await db.from("post_comments").insert({post_id:postId,user_id:currentUser.id,content});
-    if (error) throw error;
-   try {
     const {error} = await db.from("post_comments").insert({
-      post_id:postId,
-      user_id:currentUser.id,
-      content
+      post_id:postId,user_id:currentUser.id,content
     });
     if (error) throw error;
     await loadFeed();
@@ -458,74 +528,61 @@ async function addComment(postId) {
 async function searchStudents() {
   if (!currentUser) return;
   const target = el("searchResults");
-  target.innerHTML = '<div class="muted">Searching students...</div>';
+  target.innerHTML = '<p class="muted">Searching...</p>';
 
   try {
-    let query = db.from("student_profiles")
+    let q = db.from("student_profiles")
       .select("id,full_name,university,department,course,level,interests,bio")
-      .neq("id",currentUser.id)
-      .limit(50);
+      .neq("id",currentUser.id).limit(50);
 
-    const term = el("searchTerm").value.trim();
+    const term = el("searchTerm").value.trim().replace(/[,%()]/g," ");
     if (term) {
-      const safeTerm = term.replace(/[,%()]/g," ").trim();
-      if (safeTerm) {
-        query = query.or(
-          "full_name.ilike.%"+safeTerm+
-          "%,university.ilike.%"+safeTerm+
-          "%,department.ilike.%"+safeTerm+
-          "%,course.ilike.%"+safeTerm+"%"
-        );
-      }
+      q = q.or(
+        "full_name.ilike.%"+term+
+        "%,university.ilike.%"+term+
+        "%,department.ilike.%"+term+
+        "%,course.ilike.%"+term+"%"
+      );
     }
 
-    const {data,error} = await query;
+    const {data,error} = await q;
     if (error) throw error;
 
     if (!data?.length) {
-      target.innerHTML = '<div class="panel">No matching student profiles found yet.</div>';
+      target.innerHTML = '<div class="panel">No matching student profiles found.</div>';
       return;
     }
 
-    target.innerHTML = data.map(p=>`
-      <div class="profile-card">
-        <div class="person">
-          ${avatar(p.full_name)}
-          <div>
-            <strong>${esc(p.full_name||"Student")}</strong>
-            <div class="small">${esc(p.university||"University not added")}</div>
-          </div>
-        </div>
-        <p class="muted">${profileDescription(p)||"Student profile"}</p>
-        ${p.interests?`<p><strong>Interests:</strong> ${esc(p.interests)}</p>`:""}
-        ${p.bio?`<p>${esc(p.bio)}</p>`:""}
-        <button class="primary" onclick="sendRequest('${p.id}')">Connect</button>
+    target.innerHTML = data.map(p=>`<div class="profile-card">
+      <div class="person">${avatar(p.full_name)}
+        <div><strong>${esc(p.full_name||"Student")}</strong>
+        <div class="small">${esc(p.university||"University not added")}</div></div>
       </div>
-    `).join("");
+      <p class="muted">${profileInfo(p)||"Student profile"}</p>
+      ${p.interests?`<p><strong>Interests:</strong> ${esc(p.interests)}</p>`:""}
+      ${p.bio?`<p>${esc(p.bio)}</p>`:""}
+      <button class="primary" onclick="sendRequest('${p.id}')">Connect</button>
+    </div>`).join("");
   } catch(e) {
-    target.innerHTML = '<div class="panel">Search could not be completed.</div>';
-    say("Could not search students: "+e.message,"error");
+    target.innerHTML = '<div class="panel">Search failed.</div>';
+    say("Search error: "+e.message,"error");
   }
 }
 
 async function sendRequest(recipientId) {
   try {
-    if (recipientId===currentUser.id) return;
-
-    const {data:existing,error:checkError} = await db
-      .from("connection_requests")
-      .select("id,status,sender_id,recipient_id")
+    const {data:existing,error:checkError} = await db.from("connection_requests")
+      .select("id,status")
       .or(
-        "and(sender_id.eq."+currentUser.id+
-        ",recipient_id.eq."+recipientId+
-        "),and(sender_id.eq."+recipientId+
-        ",recipient_id.eq."+currentUser.id+")"
+        "and(sender_id.eq."+currentUser.id+",recipient_id.eq."+recipientId+
+        "),and(sender_id.eq."+recipientId+",recipient_id.eq."+currentUser.id+")"
       );
 
     if (checkError) throw checkError;
 
     if (existing?.length) {
-      return say("A request or connection already exists.","error");
+      say("A request or connection already exists.","error");
+      return;
     }
 
     const {error} = await db.from("connection_requests").insert({
@@ -545,23 +602,19 @@ async function loadConnections() {
   if (!currentUser) return;
 
   const target = el("connectionList");
-  target.innerHTML = '<div class="panel muted">Loading requests...</div>';
+  target.innerHTML = '<div class="panel">Loading requests...</div>';
 
   try {
-    const {data:requests,error} = await db
-      .from("connection_requests")
+    const {data:requests,error} = await db.from("connection_requests")
       .select("id,sender_id,recipient_id,status,created_at")
-      .or(
-        "sender_id.eq."+currentUser.id+
-        ",recipient_id.eq."+currentUser.id
-      )
+      .or("sender_id.eq."+currentUser.id+",recipient_id.eq."+currentUser.id)
       .order("created_at",{ascending:false})
       .limit(100);
 
     if (error) throw error;
 
     if (!requests?.length) {
-      target.innerHTML = '<div class="panel">No connection requests yet. Visit Find students to meet people.</div>';
+      target.innerHTML = '<div class="panel">No connection requests yet. Search for students to connect.</div>';
       return;
     }
 
@@ -569,59 +622,45 @@ async function loadConnections() {
       r.sender_id===currentUser.id ? r.recipient_id : r.sender_id
     ))];
 
-    const {data:profiles,error:profileError} = await db
-      .from("student_profiles")
-      .select("id,full_name,university,department,course")
+    const {data:profiles,error:profileError} = await db.from("student_profiles")
+      .select("id,full_name,university")
       .in("id",ids);
 
     if (profileError) throw profileError;
 
-    const people = Object.fromEntries(
-      (profiles||[]).map(p=>[p.id,p])
-    );
+    const people = Object.fromEntries((profiles||[]).map(p=>[p.id,p]));
 
     target.innerHTML = requests.map(r=>{
       const incoming = r.recipient_id===currentUser.id;
-      const otherId = incoming ? r.sender_id : r.recipient_id;
-      const p = people[otherId] || {full_name:"Student"};
-
-      let controls = "";
-      if (r.status==="pending" && incoming) {
-        controls = `
-          <div class="actions">
-            <button class="primary" onclick="respondRequest('${r.id}','accepted')">Accept</button>
-            <button class="secondary" onclick="respondRequest('${r.id}','declined')">Decline</button>
-          </div>`;
-      }
-
+      const other = people[incoming?r.sender_id:r.recipient_id] || {full_name:"Student"};
       const label = r.status==="accepted" ? "Connected" :
         r.status==="declined" ? "Declined" :
         incoming ? "Incoming request" : "Request sent";
 
-      return `
-        <div class="panel">
-          <div class="person">
-            ${avatar(p.full_name)}
-            <div>
-              <strong>${esc(p.full_name||"Student")}</strong>
-              <div class="small">${esc(p.university||"University not added")}</div>
-            </div>
-          </div>
-          <p class="muted">${esc(label)}</p>
-          ${controls}
-        </div>`;
+      const buttons = incoming && r.status==="pending" ? `
+        <div class="actions">
+          <button class="primary" onclick="respondRequest('${r.id}','accepted')">Accept</button>
+          <button class="secondary" onclick="respondRequest('${r.id}','declined')">Decline</button>
+        </div>` : "";
+
+      return `<div class="panel">
+        <div class="person">${avatar(other.full_name)}
+          <div><strong>${esc(other.full_name||"Student")}</strong>
+          <div class="small">${esc(other.university||"University not added")}</div></div>
+        </div>
+        <p class="muted">${esc(label)}</p>${buttons}
+      </div>`;
     }).join("");
   } catch(e) {
-    target.innerHTML = '<div class="panel">Could not load connections.</div>';
-    say("Could not load connection requests: "+e.message,"error");
+    target.innerHTML = '<div class="panel">Could not load requests.</div>';
+    say("Connections error: "+e.message,"error");
   }
 }
 
-async function respondRequest(requestId,status) {
+async function respondRequest(id,status) {
   try {
-    const {error} = await db.from("connection_requests")
-      .update({status})
-      .eq("id",requestId)
+    const {error} = await db.from("connection_requests").update({status})
+      .eq("id",id)
       .eq("recipient_id",currentUser.id)
       .eq("status","pending");
 
@@ -634,11 +673,19 @@ async function respondRequest(requestId,status) {
   }
 }
 
+let authChangeBusy = false;
+
 db.auth.onAuthStateChange((event,session)=>{
+  if (authChangeBusy) return;
+
   if (session?.user && !currentUser) {
-    startApp(session.user);
+    authChangeBusy = true;
+    Promise.resolve()
+      .then(()=>startApp(session.user))
+      .finally(()=>{authChangeBusy=false;});
   } else if (!session?.user && currentUser) {
     currentUser = null;
+    myProfile = null;
     el("app").classList.add("hidden");
     el("logoutBtn").classList.add("hidden");
     el("authBox").classList.remove("hidden");
@@ -646,14 +693,12 @@ db.auth.onAuthStateChange((event,session)=>{
 });
 
 (async function init() {
-  const {data,error} = await db.auth.getSession();
-
-  if (error) {
-    say("Could not check login session: "+error.message,"error");
-  }
-
-  if (data?.session?.user) {
-    await startApp(data.session.user);
+  try {
+    const {data,error} = await db.auth.getSession();
+    if (error) throw error;
+    if (data.session?.user) await startApp(data.session.user);
+  } catch(e) {
+    say("Could not check your login session: "+e.message,"error");
   }
 })();
 </script>
